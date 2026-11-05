@@ -1,0 +1,392 @@
+@import "tailwindcss";
+
+:root {
+  --font-serif: 'Cormorant Garamond', Georgia, serif;
+  --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+  
+  /* Warm Luxury Cream & Alabaster Palette */
+  --bg-cream-primary: #faf6f0;
+  --bg-cream-soft: #f4efe6;
+  --bg-cream-card: #ffffff;
+  --border-cream: rgba(184, 154, 115, 0.25);
+  --border-cream-hover: rgba(184, 154, 115, 0.5);
+
+  /* Deep Charcoal & Espresso for High Contrast Readability */
+  --text-primary: #1a1614;
+  --text-secondary: #5e5650;
+  --text-muted: #8c827a;
+
+  /* Royal Cobalt Blue Accent (from reference image) */
+  --color-blue-accent: #2f54eb;
+  --color-blue-hover: #1d39c4;
+  --color-gold: #c59b4b;
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+  background-color: var(--bg-cream-primary);
+  color: var(--text-primary);
+}
+
+body {
+  overflow-x: hidden;
+  min-height: 100vh;
+  background-color: var(--bg-cream-primary);
+  background-image: 
+    radial-gradient(circle at 10% 20%, rgba(245, 235, 220, 0.8) 0%, transparent 40%),
+    radial-gradient(circle at 90% 80%, rgba(238, 226, 208, 0.6) 0%, transparent 40%);
+}
+
+.font-serif-luxury {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+}
+
+/* Luxury Cream Navbar */
+.glass-nav-cream {
+  background: rgba(250, 246, 240, 0.88);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(184, 154, 115, 0.2);
+}
+
+/* Cream Luxury Cards */
+.cream-card {
+  background: #ffffff;
+  border: 1px solid rgba(184, 154, 115, 0.22);
+  box-shadow: 0 10px 30px -10px rgba(100, 80, 60, 0.07);
+}
+
+.cream-card:hover {
+  border-color: rgba(184, 154, 115, 0.45);
+  box-shadow: 0 20px 40px -15px rgba(100, 80, 60, 0.12);
+}
+
+/* Royal Cobalt Blue Button matching user reference image */
+.btn-royal-blue {
+  background: #2f54eb;
+  color: #ffffff;
+  font-weight: 600;
+  border-radius: 9999px;
+  padding: 10px 24px;
+  font-size: 0.95rem;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 18px rgba(47, 84, 235, 0.35);
+}
+
+.btn-royal-blue:hover {
+  background: #1d39c4;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(47, 84, 235, 0.5);
+}
+
+.btn-outline-cream {
+  border: 1px solid rgba(184, 154, 115, 0.35);
+  background: rgba(255, 255, 255, 0.6);
+  color: var(--text-primary);
+  border-radius: 9999px;
+  padding: 10px 22px;
+  font-size: 0.92rem;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn-outline-cream:hover {
+  background: #ffffff;
+  border-color: var(--color-gold);
+  color: var(--color-blue-accent);
+}
+
+/* 3D Canvas Fixed Background */
+.canvas-3d-fixed {
+  position: fixed;
+  inset: 0;
+  z-index: 20;
+  pointer-events: none;
+}
+
+@keyframes fadeInScale {
+  from { opacity: 0; transform: scale(0.96); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+.animate-pop-in {
+  animation: fadeInScale 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* Cyclemon Fixed Background Curtain Reveal */
+.cyclemon-curtain {
+  position: relative;
+  min-height: 100vh;
+  width: 100%;
+  clip-path: inset(0 0 0 0);
+  -webkit-clip-path: inset(0 0 0 0);
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.cyclemon-fixed-underlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Beautiful Animated Luxury Login Button */
+.btn-animated-login {
+  position: relative;
+  overflow: hidden;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.55rem 1.25rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  color: #1a1614;
+  background: linear-gradient(135deg, #ffffff 0%, #faf6f0 50%, #ffffff 100%);
+  border: 1px solid rgba(197, 155, 75, 0.45);
+  border-radius: 9999px;
+  box-shadow: 0 2px 10px rgba(197, 155, 75, 0.15), 0 1px 3px rgba(0, 0, 0, 0.04);
+  transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  cursor: pointer;
+  z-index: 1;
+}
+
+/* Moving shimmer light sweep */
+.btn-animated-login::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -80%;
+  width: 50%;
+  height: 200%;
+  background: linear-gradient(
+    120deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.9) 30%,
+    rgba(197, 155, 75, 0.3) 50%,
+    transparent 100%
+  );
+  transform: skewX(-25deg);
+  animation: loginShimmerSweep 3.2s infinite cubic-bezier(0.4, 0, 0.2, 1);
+  pointer-events: none;
+  z-index: 2;
+}
+
+/* Subtle breathing glow ring around the button */
+.btn-animated-login::after {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  border-radius: 9999px;
+  background: linear-gradient(90deg, #c59b4b, #2f54eb, #c59b4b);
+  opacity: 0;
+  z-index: -1;
+  transition: opacity 0.35s ease;
+  filter: blur(4px);
+}
+
+.btn-animated-login:hover {
+  transform: translateY(-2px) scale(1.03);
+  color: #2f54eb;
+  border-color: rgba(47, 84, 235, 0.5);
+  background: #ffffff;
+  box-shadow: 0 8px 24px -4px rgba(47, 84, 235, 0.22), 0 4px 12px rgba(197, 155, 75, 0.2);
+}
+
+.btn-animated-login:hover::after {
+  opacity: 0.4;
+}
+
+.btn-animated-login:active {
+  transform: translateY(0) scale(0.98);
+}
+
+/* Icon animations inside the login button */
+.btn-login-sparkle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.25rem;
+  height: 1.25rem;
+  font-size: 0.85rem;
+  color: #c59b4b;
+  transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1), color 0.3s ease;
+  animation: sparkleTwinkle 2.5s infinite ease-in-out;
+}
+
+.btn-animated-login:hover .btn-login-sparkle {
+  transform: rotate(180deg) scale(1.25);
+  color: #2f54eb;
+}
+
+@keyframes loginShimmerSweep {
+  0% {
+    left: -90%;
+  }
+  35% {
+    left: 170%;
+  }
+  100% {
+    left: 170%;
+  }
+}
+
+@keyframes sparkleTwinkle {
+  0%, 100% {
+    transform: scale(1) rotate(0deg);
+    opacity: 0.85;
+  }
+  50% {
+    transform: scale(1.2) rotate(15deg);
+    opacity: 1;
+  }
+}
+
+@keyframes slideDownFade {
+  from {
+    opacity: 0;
+    transform: translateY(-10px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.animate-slide-down-fade {
+  animation: slideDownFade 0.28s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* ── SPA SEAL ───────────────────────────────────────────────────────────── */
+@keyframes spaRotate {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+.spa-seal-spin {
+  animation: spaRotate 18s linear infinite;
+  transform-origin: center center;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .spa-seal-spin {
+    animation: none;
+  }
+}
+
+/* ── SPA COUNT-UP ────────────────────────────────────────────────────────── */
+.spa-count-trigger {
+  /* JS-driven counter element; ensure no layout shift */
+  display: inline-block;
+  min-width: 2ch;
+}
+
+/* ── SPA IMAGE REVEAL (clip-path wipe) ──────────────────────────────────── */
+.spa-img-reveal {
+  clip-path: inset(100% 0 0 0);
+  transition: clip-path 0.9s cubic-bezier(0.76, 0, 0.24, 1), transform 0.9s cubic-bezier(0.76, 0, 0.24, 1);
+  transform: scale(1.08);
+}
+.spa-img-reveal.is-visible {
+  clip-path: inset(0% 0 0 0);
+  transform: scale(1);
+}
+
+/* ── SPA TIMELINE LINE DRAW ─────────────────────────────────────────────── */
+@keyframes drawLine {
+  from { transform: scaleY(0); }
+  to   { transform: scaleY(1); }
+}
+.spa-timeline-line {
+  transform-origin: top center;
+  transform: scaleY(0);
+}
+.spa-timeline-line.is-drawn {
+  animation: drawLine 0.6s cubic-bezier(0.76, 0, 0.24, 1) forwards;
+}
+@media (prefers-reduced-motion: reduce) {
+  .spa-timeline-line { transform: scaleY(1); }
+  .spa-img-reveal { clip-path: inset(0); transform: none; }
+}
+
+/* ── SPA PAGE FADE-IN ─────────────────────────────────────────────────────*/
+@keyframes spaPageIn {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.spa-page-enter {
+  animation: spaPageIn 0.55s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* ── SPA PRIVILEGE RIBBON ───────────────────────────────────────────────── */
+.spa-ribbon {
+  background: linear-gradient(135deg, #1a1614 0%, #2a2018 50%, #1a1614 100%);
+  position: relative;
+  overflow: hidden;
+}
+.spa-ribbon::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, transparent 0%, rgba(197,155,75,0.12) 50%, transparent 100%);
+  animation: spaRibbonShimmer 3s ease-in-out infinite;
+}
+@keyframes spaRibbonShimmer {
+  0%, 100% { opacity: 0; transform: translateX(-100%); }
+  50% { opacity: 1; transform: translateX(100%); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .spa-ribbon::before { animation: none; }
+}
+
+/* ── LUXURY SLIDER UTILITIES & MOBILE SCROLLBAR REMOVAL ──────────────────── */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+@keyframes luxurySlideIn {
+  0% {
+    opacity: 0;
+    transform: scale(1.05);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.luxury-slide-in {
+  animation: luxurySlideIn 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes progressBar {
+  from { width: 0%; }
+  to { width: 100%; }
+}
+.spa-progress-bar {
+  animation: progressBar 5s linear infinite;
+}
+
+
