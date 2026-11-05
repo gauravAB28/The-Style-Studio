@@ -17,11 +17,12 @@ export interface Service {
   category: string; // 'hair' | 'bridal' | 'skin' | 'nails' | 'spa'
   name: string;
   duration: string;
-  originalPrice: number; // 0 for spa items (price confirmed at studio)
-  price: number;         // 0 for spa items
-  gender: string;
-  description: string;
-  isSpa?: boolean;       // flag to identify spa services
+  duration_min?: number;
+  originalPrice: number | null; // null for spa items (price confirmed at studio)
+  price: number | null;         // null for spa items
+  gender?: string;
+  description?: string;
+  isSpa?: boolean;              // flag to identify spa services
 }
 
 export interface Offer {

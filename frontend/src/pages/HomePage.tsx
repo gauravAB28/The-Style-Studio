@@ -41,7 +41,7 @@ export const HomePage: React.FC = () => {
     const matchesSearch =
       !searchQuery ||
       s.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      s.description.toLowerCase().includes(searchQuery.toLowerCase());
+      (s.description?.toLowerCase().includes(searchQuery.toLowerCase()) ?? false);
     return matchesCat && matchesSearch;
   });
 
@@ -68,7 +68,7 @@ export const HomePage: React.FC = () => {
             </p>
 
             <p className="text-xs sm:text-sm text-[#5e5650] leading-relaxed max-w-xl font-light">
-              Step into Derabassi's premier unisex salon. Explore our transparent pricing catalog, discover verified client transformations, and book your appointment with instant mobile phone OTP verification.
+              Step into Derabassi's premier unisex salon. Explore our transparent pricing catalog, discover verified client transformations, and book your appointment with instant online reservation.
             </p>
 
             <div className="flex flex-wrap items-center gap-3 sm:gap-4 pt-2">
@@ -266,12 +266,22 @@ export const HomePage: React.FC = () => {
                 </div>
                 <div className="flex items-center gap-4 flex-shrink-0">
                   <div className="text-right">
-                    <div className="text-xl font-bold text-[#8a651f] font-serif-luxury">
-                      ₹{service.price}
-                    </div>
-                    <div className="text-xs text-slate-400 line-through">
-                      ₹{service.originalPrice}
-                    </div>
+                    {service.price !== null && service.price !== undefined ? (
+                      <>
+                        <div className="text-xl font-bold text-[#8a651f] font-serif-luxury">
+                          ₹{service.price}
+                        </div>
+                        {service.originalPrice && (
+                          <div className="text-xs text-slate-400 line-through">
+                            ₹{service.originalPrice}
+                          </div>
+                        )}
+                      </>
+                    ) : (
+                      <div className="text-xs font-semibold text-[#8a651f]">
+                        Price at studio
+                      </div>
+                    )}
                   </div>
                   <button
                     type="button"

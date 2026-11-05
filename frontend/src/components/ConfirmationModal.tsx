@@ -58,16 +58,27 @@ export const ConfirmationModal: React.FC<ConfirmationModalProps> = ({ booking, w
               {booking.services.map((s, idx) => (
                 <div key={idx} className="flex justify-between text-xs">
                   <span className="text-slate-300">• {s.name}</span>
-                  <span className="text-amber-300 font-semibold">₹{s.price}</span>
+                  {s.price !== null && s.price !== undefined ? (
+                    <span className="text-amber-300 font-semibold">₹{s.price}</span>
+                  ) : (
+                    <span className="text-amber-300 font-semibold">Price at studio</span>
+                  )}
                 </div>
               ))}
             </div>
           </div>
 
-          <div className="pt-3 flex justify-between text-base font-bold text-white">
-            <span>Net Payable:</span>
-            <span className="text-xl text-amber-300">₹{booking.total}</span>
-          </div>
+          {booking.total > 0 ? (
+            <div className="pt-3 flex justify-between text-base font-bold text-white">
+              <span>Net Payable:</span>
+              <span className="text-xl text-amber-300">₹{booking.total}</span>
+            </div>
+          ) : (
+            <div className="pt-3 flex justify-between text-sm font-semibold text-amber-300">
+              <span>Rates:</span>
+              <span>Confirmed at studio</span>
+            </div>
+          )}
           {booking.totalSavings > 0 && (
             <div className="text-right text-xs text-emerald-400 font-medium">
               You saved ₹{booking.totalSavings} on this booking!

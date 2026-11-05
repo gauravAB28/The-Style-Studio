@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import type { Service, User, Booking } from '../types';
+import type { Service, Booking } from '../types';
 import { api } from '../services/api';
 
 interface BookingDrawerProps {
@@ -7,8 +7,6 @@ interface BookingDrawerProps {
   onClose: () => void;
   cart: Service[];
   onRemoveService: (id: string) => void;
-  user: User | null;
-  onRequireAuth: () => void;
   onBookingSuccess: (booking: Booking, waUrl: string) => void;
 }
 
@@ -17,19 +15,21 @@ export const BookingDrawer: React.FC<BookingDrawerProps> = ({
   onClose,
   cart,
   onRemoveService,
-  user,
-  onRequireAuth,
-  onBookingSuccess
+  onBookingSuccess,
 }) => {
   const [selectedDate, setSelectedDate] = useState(() => new Date().toISOString().split('T')[0]);
   const [selectedTime, setSelectedTime] = useState('11:30 AM');
+  const [customerName, setCustomerName] = useState('');
+  const [customerPhone, setCustomerPhone] = useState('');
+  const [nameError, setNameError] = useState('');
+  const [phoneError, setPhoneError] = useState('');
   const [coupon, setCoupon] = useState('');
   const [appliedCoupon, setAppliedCoupon] = useState<{ code: string; pct: number } | null>(null);
   const [couponError, setCouponError] = useState('');
   const [loading, setLoading] = useState(false);
 
   // Detect if cart has any spa items
-  const hasSpaItems = cart.some((item) => item.isSpa);
+  const hasSpaItems = cart.some((item) => item.isSpa || item.category === 'spa');
 
   // Auto-apply SPA30 when spa items are in cart
   useEffect(() => {
@@ -56,7 +56,7 @@ export const BookingDrawer: React.FC<BookingDrawerProps> = ({
   const timeSlots = ['10:30 AM', '11:30 AM', '01:00 PM', '02:30 PM', '04:00 PM', '05:30 PM', '07:00 PM'];
 
   // Only sum non-spa items for monetary totals (spa prices confirmed at studio)
-  const nonSpaItems = cart.filter((item) => !item.isSpa);
+  const nonSpaItems = cart.filter((item) => !item.isSpa && item.category !== 'spa' && item.price !== null);
   const subtotal = nonSpaItems.reduce((acc, item) => acc + (item.price || 0), 0);
   const originalSubtotal = nonSpaItems.reduce((acc, item) => acc + (item.originalPrice || 0), 0);
 
@@ -79,27 +79,48 @@ export const BookingDrawer: React.FC<BookingDrawerProps> = ({
       setAppliedCoupon({ code: 'BRIDE35', pct: 35 });
     } else if (c === 'GLAM30') {
       setAppliedCoupon({ code: 'GLAM30', pct: 30 });
+    } else if (c === 'GLOW25') {
+      setAppliedCoupon({ code: 'GLOW25', pct: 25 });
     } else if (c === 'SPA30') {
       setAppliedCoupon({ code: 'SPA30', pct: 0 });
     } else {
-      setCouponError('Invalid code. Try ROYAL40, BRIDE35, or GLAM30');
+      setCouponError('Invalid code. Try ROYAL40, BRIDE35, GLAM30, or GLOW25');
     }
+  };
+
+  const validate = () => {
+    let valid = true;
+    const trimmed = customerName.trim();
+    if (trimmed.length < 2 || trimmed.length > 60) {
+      setNameError('Name must be between 2 and 60 characters');
+      valid = false;
+    } else {
+      setNameError('');
+    }
+
+    if (!/^[6-9]\d{9}$/.test(customerPhone.trim())) {
+      setPhoneError('Please enter a valid 10-digit Indian mobile number (starts with 6-9)');
+      valid = false;
+    } else {
+      setPhoneError('');
+    }
+
+    return valid;
   };
 
   const handleCheckout = async () => {
     if (cart.length === 0) return;
-    if (!user) {
-      onRequireAuth();
-      return;
-    }
+    if (!validate()) return;
+
     try {
       setLoading(true);
       const res = await api.createBooking({
-        user,
+        name: customerName.trim(),
+        phone: customerPhone.trim(),
         services: cart,
         date: selectedDate,
         time: selectedTime,
-        couponCode: appliedCoupon?.code
+        couponCode: appliedCoupon?.code,
       });
       onBookingSuccess(res.booking, res.waDispatchUrl);
       onClose();
@@ -170,23 +191,25 @@ export const BookingDrawer: React.FC<BookingDrawerProps> = ({
                     <div>
                       <div className="text-sm font-semibold text-[#1a1614] flex items-center gap-1.5">
                         {item.name}
-                        {item.isSpa && (
+                        {(item.isSpa || item.category === 'spa') && (
                           <span className="text-[9px] px-1.5 py-0.5 rounded-full bg-[#c59b4b]/20 text-[#8a651f] font-bold">SPA</span>
                         )}
                       </div>
                       <div className="text-xs text-[#5e5650] mt-0.5">⏱️ {item.duration}</div>
                     </div>
                     <div className="flex items-center gap-3">
-                      {/* Spa: show privilege label instead of price */}
-                      {item.isSpa ? (
+                      {/* Spa / null price: show "Price confirmed at the studio" */}
+                      {item.isSpa || item.category === 'spa' || item.price === null ? (
                         <div className="text-right">
-                          <div className="text-xs font-bold text-[#c59b4b]">30% Privilege</div>
-                          <div className="text-[10px] text-[#8c827a]">At studio</div>
+                          <div className="text-xs font-bold text-[#c59b4b]">Price confirmed at the studio</div>
+                          <div className="text-[10px] text-[#8c827a]">30% Privilege</div>
                         </div>
                       ) : (
                         <div className="text-right">
                           <div className="text-sm font-bold text-[#2f54eb]">₹{item.price}</div>
-                          <div className="text-xs text-[#8c827a] line-through">₹{item.originalPrice}</div>
+                          {item.originalPrice && (
+                            <div className="text-xs text-[#8c827a] line-through">₹{item.originalPrice}</div>
+                          )}
                         </div>
                       )}
                       <button
@@ -252,10 +275,71 @@ export const BookingDrawer: React.FC<BookingDrawerProps> = ({
                   </div>
                 </div>
 
+                {/* Guest Details (No customer login/OTP required) */}
+                <div>
+                  <div className="text-xs font-semibold uppercase tracking-wider text-[#5e5650] mb-2.5">
+                    3. Guest Details
+                  </div>
+                  <div className="space-y-3">
+                    <div>
+                      <label className="block text-[11px] font-semibold text-[#5e5650] uppercase tracking-wider mb-1">
+                        Full Name
+                      </label>
+                      <input
+                        type="text"
+                        value={customerName}
+                        onChange={(e) => {
+                          setCustomerName(e.target.value);
+                          if (nameError) setNameError('');
+                        }}
+                        maxLength={60}
+                        placeholder="Your full name (e.g. Ananya Sharma)"
+                        className={`w-full px-3.5 py-2.5 bg-[#faf6f0] border rounded-xl text-xs text-[#1a1614] placeholder:text-slate-400 focus:outline-none transition-colors ${
+                          nameError ? 'border-red-500 focus:border-red-500' : 'border-[#b89a73]/30 focus:border-[#2f54eb]'
+                        }`}
+                      />
+                      {nameError && (
+                        <p className="text-[11px] text-red-500 mt-1 font-medium">{nameError}</p>
+                      )}
+                    </div>
+
+                    <div>
+                      <label className="block text-[11px] font-semibold text-[#5e5650] uppercase tracking-wider mb-1">
+                        Phone Number (10 Digits)
+                      </label>
+                      <div className="relative">
+                        <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-xs font-semibold text-[#786e64]">
+                          +91
+                        </span>
+                        <input
+                          type="tel"
+                          inputMode="numeric"
+                          maxLength={10}
+                          value={customerPhone}
+                          onChange={(e) => {
+                            const digits = e.target.value.replace(/\D/g, '').slice(0, 10);
+                            setCustomerPhone(digits);
+                            if (phoneError) setPhoneError('');
+                          }}
+                          placeholder="9876543210"
+                          className={`w-full pl-12 pr-3.5 py-2.5 bg-[#faf6f0] border rounded-xl text-xs font-medium text-[#1a1614] placeholder:text-slate-400 focus:outline-none transition-colors tracking-wide ${
+                            phoneError ? 'border-red-500 focus:border-red-500' : 'border-[#b89a73]/30 focus:border-[#2f54eb]'
+                          }`}
+                        />
+                      </div>
+                      {phoneError ? (
+                        <p className="text-[11px] text-red-500 mt-1 font-medium">{phoneError}</p>
+                      ) : (
+                        <p className="text-[10px] text-[#786e64] mt-1">Instant confirmation · No customer login or OTP required</p>
+                      )}
+                    </div>
+                  </div>
+                </div>
+
                 {/* Promo Code */}
                 <div>
                   <div className="text-xs font-semibold uppercase tracking-wider text-[#5e5650] mb-2">
-                    3. Privilege Promo Code
+                    4. Privilege Promo Code
                   </div>
                   <form onSubmit={handleApplyCoupon} className="flex gap-2">
                     <input
@@ -293,7 +377,7 @@ export const BookingDrawer: React.FC<BookingDrawerProps> = ({
                 <div className="text-center py-2">
                   <div className="font-serif-luxury italic text-lg text-[#8a651f] mb-1">Spa Rituals Selected</div>
                   <p className="text-xs text-[#5e5650] leading-relaxed">
-                    Pricing is confirmed at the studio. 30% Wellness Privilege (SPA30) is applied to all spa services.
+                    Price confirmed at the studio. 30% Wellness Privilege is included for all spa services.
                   </p>
                 </div>
               ) : (
@@ -322,7 +406,7 @@ export const BookingDrawer: React.FC<BookingDrawerProps> = ({
                   )}
                   {hasSpaItems && nonSpaItems.length > 0 && (
                     <div className="text-[10px] text-[#8a651f] bg-[#c59b4b]/10 rounded-xl p-2.5 border border-[#c59b4b]/20">
-                      ✦ 30% Wellness Privilege applied on spa sessions · Rates confirmed at studio
+                      ✦ 30% Wellness Privilege included on spa sessions · Price confirmed at the studio
                     </div>
                   )}
                 </>
@@ -334,11 +418,7 @@ export const BookingDrawer: React.FC<BookingDrawerProps> = ({
                 disabled={loading}
                 className="w-full btn-royal-blue py-3.5 mt-2 font-bold shadow-lg"
               >
-                {loading
-                  ? 'Confirming...'
-                  : user
-                  ? 'Reserve Appointment ➔'
-                  : 'Verify Phone & Book ➔'}
+                {loading ? 'Confirming...' : 'Reserve Appointment ➔'}
               </button>
             </div>
           )}

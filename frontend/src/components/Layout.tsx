@@ -2,30 +2,25 @@ import React, { useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import Lenis from 'lenis';
 import { api } from '../services/api';
-import type { User, Service, Booking, SalonInfo } from '../types';
-import { AuthModal } from './AuthModal';
+import type { Service, Booking, SalonInfo } from '../types';
 import { BookingDrawer } from './BookingDrawer';
 import { ConfirmationModal } from './ConfirmationModal';
 
 interface LayoutContextValue {
-  user: User | null;
   cart: Service[];
   salon: SalonInfo | null;
   handleAddToCart: (service: Service) => void;
   handleRemoveFromCart: (id: string) => void;
   setIsBookingOpen: (open: boolean) => void;
-  setIsAuthOpen: (open: boolean) => void;
   showToast: (msg: string) => void;
 }
 
 export const LayoutContext = React.createContext<LayoutContextValue>({
-  user: null,
   cart: [],
   salon: null,
   handleAddToCart: () => {},
   handleRemoveFromCart: () => {},
   setIsBookingOpen: () => {},
-  setIsAuthOpen: () => {},
   showToast: () => {},
 });
 
@@ -45,17 +40,7 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
 
   const [salon, setSalon] = useState<SalonInfo | null>(null);
   const [cart, setCart] = useState<Service[]>([]);
-  const [user, setUser] = useState<User | null>(() => {
-    try {
-      const saved = localStorage.getItem('ssl_user');
-      return saved ? JSON.parse(saved) : null;
-    } catch {
-      return null;
-    }
-  });
-
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [isAuthOpen, setIsAuthOpen] = useState(false);
   const [isBookingOpen, setIsBookingOpen] = useState(false);
   const [confirmedBooking, setConfirmedBooking] = useState<{ booking: Booking; waUrl: string } | null>(null);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
@@ -99,18 +84,6 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
     setIsMobileMenuOpen(false);
   }, [location.pathname]);
 
-  const handleUserLogin = (loggedUser: User) => {
-    setUser(loggedUser);
-    localStorage.setItem('ssl_user', JSON.stringify(loggedUser));
-    showToast(`Welcome, ${loggedUser.name}! VIP Pass active.`);
-  };
-
-  const handleLogout = () => {
-    setUser(null);
-    localStorage.removeItem('ssl_user');
-    showToast('Logged out successfully.');
-  };
-
   const handleAddToCart = (service: Service) => {
     setCart(prev => {
       if (prev.some(item => item.id === service.id)) return prev;
@@ -125,13 +98,11 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
   };
 
   const ctxValue: LayoutContextValue = {
-    user,
     cart,
     salon,
     handleAddToCart,
     handleRemoveFromCart,
     setIsBookingOpen,
-    setIsAuthOpen,
     showToast,
   };
 
@@ -188,23 +159,6 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
 
             {/* Desktop Right Actions */}
             <div className="hidden lg:flex items-center gap-2.5 sm:gap-3 flex-shrink-0">
-              {user ? (
-                <div className="flex items-center gap-1.5 sm:gap-2 px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-full bg-white border border-[#b89a73]/30 text-xs shadow-sm">
-                  <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-                  <span className="font-semibold text-[#1a1614] max-w-[70px] sm:max-w-none truncate">{user.name}</span>
-                  <span className="text-[10px] bg-[#c59b4b]/20 text-[#855e16] px-1.5 py-0.5 rounded font-bold">VIP</span>
-                  <button type="button" onClick={handleLogout} className="text-slate-400 hover:text-black ml-1 text-xs" title="Log out">✕</button>
-                </div>
-              ) : (
-                <button
-                  type="button"
-                  onClick={() => setIsAuthOpen(true)}
-                  className="inline-flex btn-animated-login py-1.5 px-3.5 sm:px-4 text-xs font-semibold shadow-sm flex-shrink-0"
-                >
-                  <span className="btn-login-sparkle text-xs" aria-hidden="true">✦</span>
-                  <span>Login</span>
-                </button>
-              )}
               <button
                 type="button"
                 onClick={() => setIsBookingOpen(true)}
@@ -262,40 +216,6 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
           {isMobileMenuOpen && (
             <div className="lg:hidden px-3.5 pb-5 pt-1 animate-slide-down-fade">
               <div className="bg-[#faf7f2]/98 backdrop-blur-2xl rounded-3xl border border-[#b89a73]/30 shadow-2xl p-4 sm:p-5 space-y-4 max-h-[82vh] overflow-y-auto">
-                {/* VIP Auth Card */}
-                <div className="p-3.5 rounded-2xl bg-white border border-[#b89a73]/25 shadow-sm">
-                  {user ? (
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center gap-2">
-                        <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse" />
-                        <div>
-                          <div className="text-xs font-bold text-[#1a1614] flex items-center gap-1.5">
-                            {user.name}
-                            <span className="text-[9px] bg-[#c59b4b]/20 text-[#855e16] px-1.5 py-0.5 rounded font-bold">VIP PASS</span>
-                          </div>
-                          <div className="text-[10px] text-[#786e64]">{user.phone}</div>
-                        </div>
-                      </div>
-                      <button type="button" onClick={handleLogout} className="text-xs text-rose-500 hover:underline font-medium px-2 py-1">Logout</button>
-                    </div>
-                  ) : (
-                    <div className="flex items-center justify-between">
-                      <div>
-                        <div className="text-xs font-bold text-[#1a1614]">VIP Guest Lounge</div>
-                        <div className="text-[10px] text-[#786e64]">Log in for bespoke privileges</div>
-                      </div>
-                      <button
-                        type="button"
-                        onClick={() => { setIsMobileMenuOpen(false); setIsAuthOpen(true); }}
-                        className="btn-animated-login py-1.5 px-3 text-xs font-semibold shadow-sm"
-                      >
-                        <span className="btn-login-sparkle text-xs">✦</span>
-                        <span>Login</span>
-                      </button>
-                    </div>
-                  )}
-                </div>
-
                 {/* Common Mobile Navigation Links */}
                 <nav className="divide-y divide-[#b89a73]/15">
                   {isHome ? (
@@ -348,14 +268,11 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
         {children}
 
         {/* Shared Modals */}
-        <AuthModal isOpen={isAuthOpen} onClose={() => setIsAuthOpen(false)} onSuccess={handleUserLogin} />
         <BookingDrawer
           isOpen={isBookingOpen}
           onClose={() => setIsBookingOpen(false)}
           cart={cart}
           onRemoveService={handleRemoveFromCart}
-          user={user}
-          onRequireAuth={() => { setIsBookingOpen(false); setIsAuthOpen(true); }}
           onBookingSuccess={(booking, waUrl) => {
             setConfirmedBooking({ booking, waUrl });
             setCart([]);

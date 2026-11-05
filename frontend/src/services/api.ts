@@ -47,7 +47,9 @@ export const api = {
   },
 
   async createBooking(payload: {
-    user: User;
+    name?: string;
+    phone?: string;
+    user?: User;
     services: Service[];
     date: string;
     time: string;
@@ -59,7 +61,10 @@ export const api = {
       body: JSON.stringify(payload)
     });
     const data = await res.json();
-    if (!res.ok) throw new Error(data.error || 'Failed to complete booking');
+    if (!res.ok) {
+      const msg = typeof data.error === 'object' && data.error?.message ? data.error.message : (data.error || 'Failed to complete booking');
+      throw new Error(msg);
+    }
     return data;
   }
 };

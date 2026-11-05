@@ -1,5 +1,10 @@
+require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
+const { z } = require('zod');
+const db = require('./db/index');
+const { OFFERS_DATA } = require('./config/offers');
+const { SERVICE_DISPLAY_DURATION } = require('./config/serviceDisplay');
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -7,7 +12,7 @@ const PORT = process.env.PORT || 5000;
 app.use(cors());
 app.use(express.json());
 
-// In-Memory Storage
+// In-Memory Storage (for legacy sessions & bookings)
 const OTP_STORE = new Map();
 const USERS_STORE = new Map();
 const BOOKINGS_STORE = new Map();
@@ -25,7 +30,7 @@ const SALON_DATA = {
   logoUrl: "https://thestylestudiolounge.com/wp-content/uploads/2026/02/cropped-14_20260121_181045_0001-1.png"
 };
 
-// 3D Portal Windows / Studios (Matching reference image: "Case-study cards are windows into separate 3D...")
+// Studios Data
 const STUDIOS_DATA = [
   {
     id: "hair-atelier",
@@ -81,228 +86,20 @@ const STUDIOS_DATA = [
   }
 ];
 
-// Complete Services Catalog with Real Salon Rates
-const SERVICES_DATA = [
-  // Hair
-  {
-    id: "s1",
-    category: "hair",
-    name: "Architectural Cut & Blowout",
-    duration: "45 mins",
-    originalPrice: 799,
-    price: 499,
-    gender: "Unisex",
-    description: "Consultation, soothing scalp wash, bespoke textured precision cut, and signature volume finish."
-  },
-  {
-    id: "s2",
-    category: "hair",
-    name: "Royal Keratin Smoothening Therapy",
-    duration: "120 mins",
-    originalPrice: 4999,
-    price: 2999,
-    gender: "Unisex",
-    description: "Formaldehyde-safe botanical protein replenishment for liquid glass, zero frizz hair."
-  },
-  {
-    id: "s3",
-    category: "hair",
-    name: "Dimensional Balayage & Olaplex",
-    duration: "150 mins",
-    originalPrice: 5500,
-    price: 3699,
-    gender: "Female / Unisex",
-    description: "Hand-painted sunlit gradient with Olaplex bond multiplier protection."
-  },
-  {
-    id: "s4",
-    category: "hair",
-    name: "Italian Ammonia-Free Global Color",
-    duration: "90 mins",
-    originalPrice: 3800,
-    price: 2499,
-    gender: "Unisex",
-    description: "Deep reflective rich pigments that nourish the hair cuticle."
-  },
+// ── ROUTES ──────────────────────────────────────────────────────────────────
 
-  // Bridal
-  {
-    id: "s5",
-    category: "bridal",
-    name: "Signature HD Bridal Makeover",
-    duration: "180 mins",
-    originalPrice: 15999,
-    price: 10399,
-    gender: "Bridal",
-    description: "Complete camera-ready look with Huda Beauty, MAC, Charlotte Tilbury, hair design & draping."
-  },
-  {
-    id: "s6",
-    category: "bridal",
-    name: "Ultra-Airbrush HD Bridal Glamour",
-    duration: "210 mins",
-    originalPrice: 19999,
-    price: 13999,
-    gender: "Bridal",
-    description: "Featherlight 24hr silicon airbrush base, sweatproof and tearproof."
-  },
-  {
-    id: "s7",
-    category: "bridal",
-    name: "Engagement & Sagan Celebration Makeup",
-    duration: "120 mins",
-    originalPrice: 6500,
-    price: 4499,
-    gender: "Female",
-    description: "Soft contoured glow with custom 3D faux mink lashes and modern bridal waves."
-  },
-
-  // Skin
-  {
-    id: "s8",
-    category: "skin",
-    name: "7-Step Clinical Hydra Facial",
-    duration: "60 mins",
-    originalPrice: 3499,
-    price: 2624,
-    gender: "Unisex",
-    description: "Vortex vacuum pore suction, hyaluronic acid serum wash, cold hammer pore locking & LED therapy."
-  },
-  {
-    id: "s9",
-    category: "skin",
-    name: "24K Gold Illuminating Facial",
-    duration: "60 mins",
-    originalPrice: 2800,
-    price: 1899,
-    gender: "Unisex",
-    description: "Micro gold leaf infusion providing instant radiant brightness."
-  },
-
-  // Nails
-  {
-    id: "s10",
-    category: "nails",
-    name: "Sculpted Gel / Acrylic Extensions",
-    duration: "90 mins",
-    originalPrice: 2499,
-    price: 1749,
-    gender: "Female / Unisex",
-    description: "Chip-resistant length enhancement with French or chrome gloss topcoat."
-  },
-  {
-    id: "s11",
-    category: "nails",
-    name: "Ice Cream Bubble Spa Pedicure",
-    duration: "50 mins",
-    originalPrice: 1499,
-    price: 999,
-    gender: "Unisex",
-    description: "Fizzy candy bath, callus smoothing, sea salt scrub, and therapeutic foot massage."
-  },
-
-  // ── SPA & WELLNESS ──────────────────────────────────────────────────────────
-  // Note: price = 0 means "confirmed at studio". 30% privilege always applied.
-  {
-    id: "spa-01",
-    category: "spa",
-    name: "Turkish Hammam",
-    duration: "75 / 90 min",
-    originalPrice: 0,
-    price: 0,
-    gender: "Unisex",
-    description: "Steam, kese exfoliation and aromatic foam cleanse. Centuries-old bathing ritual for deep pore cleansing and luminous skin.",
-    isSpa: true
-  },
-  {
-    id: "spa-02",
-    category: "spa",
-    name: "Balinese Massage",
-    duration: "60 / 90 min",
-    originalPrice: 0,
-    price: 0,
-    gender: "Unisex",
-    description: "Long effleurage, acupressure and gentle stretches with warm aromatic oils. Eases stiffness and restores energetic balance.",
-    isSpa: true
-  },
-  {
-    id: "spa-03",
-    category: "spa",
-    name: "Swedish Restorative Massage",
-    duration: "60 / 90 min",
-    originalPrice: 0,
-    price: 0,
-    gender: "Unisex",
-    description: "Light-to-medium flowing strokes that melt surface tension and restore deep ease. Ideal first massage experience.",
-    isSpa: true
-  },
-  {
-    id: "spa-04",
-    category: "spa",
-    name: "Deep Tissue Recovery",
-    duration: "60 / 90 min",
-    originalPrice: 0,
-    price: 0,
-    gender: "Unisex",
-    description: "Slow, firm pressure along muscle fibres and fascia. Targets chronic knots, aids posture and supports sports recovery.",
-    isSpa: true
-  },
-  {
-    id: "spa-05",
-    category: "spa",
-    name: "Aromatherapy Massage",
-    duration: "60 / 90 min",
-    originalPrice: 0,
-    price: 0,
-    gender: "Unisex",
-    description: "Gentle flowing massage paired with your chosen pure essential oil blend. Seven curated blends available from Lavender Calm to Citrus Sun.",
-    isSpa: true
+// 1. Health Check (runs SELECT 1 against Postgres pool; never exposes details on error)
+app.get('/api/health', async (req, res) => {
+  try {
+    await db.query('SELECT 1');
+    return res.status(200).json({ status: "ok", db: "connected" });
+  } catch (err) {
+    console.error('[HEALTH] Database health check failed:', err.message);
+    return res.status(503).json({ status: "error" });
   }
-];
+});
 
-// Special Limited Privilege Offers
-const OFFERS_DATA = [
-  {
-    id: "offer-royal40",
-    code: "ROYAL40",
-    badge: "40% OFF",
-    title: "Keratin Revival & Scalp Detox",
-    originalPrice: 4999,
-    price: 2999,
-    services: ["Royal Keratin Smoothening", "Scalp Detox Pre-Wash", "Ionic Blowout"]
-  },
-  {
-    id: "offer-bride35",
-    code: "BRIDE35",
-    badge: "35% OFF",
-    title: "Signature HD Bridal Package",
-    originalPrice: 15999,
-    price: 10399,
-    services: ["HD Bridal Makeup", "Pre-Bridal Glow Prep", "Bridal Hair & Draping"]
-  },
-  {
-    id: "offer-glam30",
-    code: "GLAM30",
-    badge: "30% OFF",
-    title: "Gel Nail Extensions + Custom Art",
-    originalPrice: 2499,
-    price: 1749,
-    services: ["Full Set Gel Extensions", "French Chrome Art", "Cuticle Revival Spa"]
-  },
-  {
-    id: "offer-spa30",
-    code: "SPA30",
-    badge: "30% WELLNESS PRIVILEGE",
-    title: "Spa & Wellness — 30% Privilege",
-    originalPrice: 0,
-    price: 0,
-    services: ["Ayurvedic Abhyanga", "Turkish Hammam", "Balinese Massage", "Swedish Massage", "Deep Tissue Massage", "Aromatherapy Massage"]
-  }
-];
-
-// Routes
-
-// 1. Salon Info & Studios
+// 2. Salon Info & Studios
 app.get('/api/salon-info', (req, res) => {
   res.json({
     salon: SALON_DATA,
@@ -310,39 +107,70 @@ app.get('/api/salon-info', (req, res) => {
   });
 });
 
-// 2. Services List
-app.get('/api/services', (req, res) => {
-  const { category, search } = req.query;
-  let list = [...SERVICES_DATA];
+// 3. Services List (from PostgreSQL database)
+app.get('/api/services', async (req, res) => {
+  try {
+    const { category, search } = req.query;
+    let queryText = 'SELECT id, name, category, duration_min, price_inr, original_price_inr, active FROM services WHERE active = true';
+    const queryParams = [];
 
-  if (category && category !== 'all') {
-    list = list.filter(s => s.category === category);
+    if (category && category !== 'all') {
+      queryParams.push(category);
+      queryText += ` AND LOWER(category) = LOWER($${queryParams.length})`;
+    }
+
+    if (search && search.trim()) {
+      queryParams.push(`%${search.trim()}%`);
+      queryText += ` AND (name ILIKE $${queryParams.length} OR category ILIKE $${queryParams.length})`;
+    }
+
+    queryText += ' ORDER BY created_at ASC';
+
+    const result = await db.query(queryText, queryParams);
+
+    const services = result.rows.map(row => {
+      const isSpa = row.category.toLowerCase() === 'spa';
+      const durationDisplay = SERVICE_DISPLAY_DURATION[row.name] || `${row.duration_min} mins`;
+
+      return {
+        id: row.id,
+        category: row.category.toLowerCase(), // lowercase for frontend compatibility
+        name: row.name,
+        duration: durationDisplay,            // UI display string
+        duration_min: row.duration_min,       // minutes integer
+        originalPrice: row.original_price_inr, // null for spa
+        price: row.price_inr,                 // null for spa
+        gender: isSpa ? 'Unisex' : (row.category.toLowerCase() === 'bridal' ? 'Bridal' : 'Unisex'),
+        description: isSpa 
+          ? 'Exclusive spa therapy at The Style Studio Lounge.' 
+          : `Artisan ${row.category} therapy at The Style Studio Lounge.`,
+        isSpa
+      };
+    });
+
+    res.json({ services });
+  } catch (err) {
+    console.error('[SERVICES] Error fetching services from database:', err.message);
+    res.status(500).json({ error: { code: 'DATABASE_ERROR', message: 'Failed to fetch services' } });
   }
-
-  if (search) {
-    const q = search.toLowerCase();
-    list = list.filter(s => s.name.toLowerCase().includes(q) || s.description.toLowerCase().includes(q));
-  }
-
-  res.json({ services: list });
 });
 
-// 3. Offers List
+// 4. Offers List (from config/offers.js)
 app.get('/api/offers', (req, res) => {
   res.json({ offers: OFFERS_DATA });
 });
 
-// 4. Send OTP (Mobile Phone Auth)
+// 5. Send OTP (Mobile Phone Auth - kept in place, unused)
 app.post('/api/auth/send-otp', (req, res) => {
   const { name, phone } = req.body;
 
   if (!name || name.trim().length < 2) {
-    return res.status(400).json({ error: "Please provide your full name" });
+    return res.status(400).json({ error: { code: 'INVALID_NAME', message: "Please provide your full name" } });
   }
 
   const cleanPhone = (phone || '').replace(/[^0-9]/g, '');
   if (cleanPhone.length < 10) {
-    return res.status(400).json({ error: "Please enter a valid 10-digit mobile number" });
+    return res.status(400).json({ error: { code: 'INVALID_PHONE', message: "Please enter a valid 10-digit mobile number" } });
   }
 
   const normalizedPhone = `+91 ${cleanPhone.slice(-10)}`;
@@ -361,16 +189,16 @@ app.post('/api/auth/send-otp', (req, res) => {
     message: `Verification code sent to ${normalizedPhone}`,
     phone: normalizedPhone,
     name: name.trim(),
-    demoOtp: generatedOtp // Returned so UI can auto-fill or show simulation
+    demoOtp: generatedOtp
   });
 });
 
-// 5. Verify OTP
+// 6. Verify OTP (kept in place, unused)
 app.post('/api/auth/verify-otp', (req, res) => {
   const { phone, otp } = req.body;
 
   if (!phone || !otp) {
-    return res.status(400).json({ error: "Phone and 4-digit OTP are required" });
+    return res.status(400).json({ error: { code: 'MISSING_FIELDS', message: "Phone and 4-digit OTP are required" } });
   }
 
   const cleanPhone = phone.replace(/[^0-9]/g, '');
@@ -399,24 +227,51 @@ app.post('/api/auth/verify-otp', (req, res) => {
     });
   }
 
-  res.status(400).json({ error: "Invalid OTP. Please check the code or click Resend." });
+  res.status(400).json({ error: { code: 'INVALID_OTP', message: "Invalid OTP. Please check the code or click Resend." } });
 });
 
-// 6. Create Booking & Generate WhatsApp URL
+// 7. Legacy Booking Endpoint (Adjusted to accept direct name + 10-digit phone with Zod validation)
+const legacyBookingSchema = z.object({
+  name: z.string().trim().min(2, "Name must be at least 2 characters").max(60, "Name must be at most 60 characters"),
+  phone: z.string().regex(/^[6-9]\d{9}$/, "Please enter a valid 10-digit Indian mobile number starting with 6-9"),
+  services: z.array(z.any()).min(1, "Select at least one service to book"),
+  date: z.string().optional(),
+  time: z.string().optional(),
+  couponCode: z.string().nullable().optional(),
+  notes: z.string().optional()
+});
+
 app.post('/api/bookings', (req, res) => {
-  const { user, services, date, time, couponCode, notes } = req.body;
+  // Support both direct { name, phone } and legacy { user: { name, phone } }
+  const rawPayload = {
+    name: req.body.name || req.body.user?.name,
+    phone: req.body.phone ? String(req.body.phone).replace(/\D/g, '').slice(-10) : (req.body.user?.phone ? String(req.body.user.phone).replace(/\D/g, '').slice(-10) : ''),
+    services: req.body.services,
+    date: req.body.date,
+    time: req.body.time,
+    couponCode: req.body.couponCode,
+    notes: req.body.notes
+  };
 
-  if (!user || !user.phone) {
-    return res.status(401).json({ error: "Please verify your mobile number first." });
+  const parseResult = legacyBookingSchema.safeParse(rawPayload);
+  if (!parseResult.success) {
+    const firstError = parseResult.error.issues[0]?.message || "Invalid booking data";
+    return res.status(400).json({ error: { code: 'VALIDATION_ERROR', message: firstError } });
   }
 
-  if (!services || !services.length) {
-    return res.status(400).json({ error: "Select at least one service to book." });
-  }
+  const { name, phone, services, date, time, couponCode, notes } = parseResult.data;
 
-  // Spa items have price=0; only sum non-spa items for monetary totals
-  const subtotal = services.reduce((sum, s) => sum + (s.price || 0), 0);
-  const originalSubtotal = services.reduce((sum, s) => sum + (s.originalPrice || s.price || 0), 0);
+  // Safe pricing calculation: null/undefined spa prices are treated as 0 for monetary totals
+  // (Report note: in this legacy route, client-sent s.price and s.originalPrice are summed without DB re-computation)
+  const subtotal = services.reduce((sum, s) => {
+    const p = typeof s.price === 'number' && !isNaN(s.price) ? s.price : 0;
+    return sum + p;
+  }, 0);
+
+  const originalSubtotal = services.reduce((sum, s) => {
+    const p = typeof s.originalPrice === 'number' && !isNaN(s.originalPrice) ? s.originalPrice : (typeof s.price === 'number' && !isNaN(s.price) ? s.price : 0);
+    return sum + p;
+  }, 0);
 
   let discount = 0;
   if (couponCode) {
@@ -425,7 +280,7 @@ app.post('/api/bookings', (req, res) => {
     else if (c === 'BRIDE35') discount = Math.round(subtotal * 0.35);
     else if (c === 'GLAM30') discount = Math.round(subtotal * 0.30);
     else if (c === 'GLOW25') discount = Math.round(subtotal * 0.25);
-    else if (c === 'SPA30') discount = 0; // spa prices confirmed at studio; privilege noted
+    else if (c === 'SPA30') discount = 0; // spa prices confirmed at studio
   }
 
   const total = Math.max(0, subtotal - discount);
@@ -434,7 +289,7 @@ app.post('/api/bookings', (req, res) => {
 
   const booking = {
     bookingId,
-    user,
+    user: { name, phone: `+91 ${phone}` },
     services,
     date: date || new Date().toISOString().split('T')[0],
     time: time || '11:30 AM',
@@ -450,21 +305,23 @@ app.post('/api/bookings', (req, res) => {
 
   BOOKINGS_STORE.set(bookingId, booking);
 
-  // Build WhatsApp payload — spa items show duration + privilege note, not price
+  // Build WhatsApp payload — spa/null price items show duration + confirmed at studio
   const serviceListText = services.map(s => {
-    if (s.isSpa) return `• ${s.name} (${s.duration}) — SPA30: 30% Wellness Privilege`;
+    if (s.isSpa || s.price === null || s.price === undefined) {
+      return `• ${s.name} (${s.duration || 'Session'}) — Price confirmed at studio · 30% Wellness Privilege`;
+    }
     return `• ${s.name} (₹${s.price})`;
   }).join('\n');
 
-  const hasSpaItems = services.some(s => s.isSpa);
+  const hasSpaItems = services.some(s => s.isSpa || s.price === null);
   const spaNote = hasSpaItems ? '\n🌿 *Spa Pricing:* Confirmed at the studio · 30% Wellness Privilege applied\n' : '';
 
   const waText = encodeURIComponent(
     `*Appointment Reservation — The Style Studio Lounge (Derabassi)*\n` +
     `-----------------------------------------\n` +
     `🎫 *Booking ID:* ${bookingId}\n` +
-    `👤 *Client Name:* ${user.name}\n` +
-    `📞 *Phone:* ${user.phone}\n` +
+    `👤 *Client Name:* ${name}\n` +
+    `📞 *Phone:* +91 ${phone}\n` +
     `📅 *Date:* ${booking.date}\n` +
     `⏰ *Time Slot:* ${booking.time}\n\n` +
     `*Selected Services:*\n${serviceListText}\n` +
@@ -472,7 +329,7 @@ app.post('/api/bookings', (req, res) => {
     (subtotal > 0 ? `\n💰 *Net Amount:* ₹${total} (Saved ₹${totalSavings})\n` : '') +
     `📍 *Salon:* Opposite Paras Plaza, Derabassi\n` +
     `-----------------------------------------\n` +
-    `_Booked via The Style Studio Lounge VIP Web Portal_`
+    `_Booked via The Style Studio Lounge Web Portal_`
   );
 
   const waDispatchUrl = `https://wa.me/${SALON_DATA.phoneRaw}?text=${waText}`;
@@ -484,6 +341,24 @@ app.post('/api/bookings', (req, res) => {
   });
 });
 
-app.listen(PORT, () => {
+// Start Server with Graceful Shutdown
+const server = app.listen(PORT, () => {
   console.log(`[SERVER] The Style Studio Lounge API running on http://localhost:${PORT}`);
 });
+
+const gracefulShutdown = async () => {
+  console.log('[SERVER] Received shutdown signal, closing server & database pool...');
+  server.close(async () => {
+    try {
+      await db.end();
+      console.log('[SERVER] Database pool closed. Shutdown complete.');
+      process.exit(0);
+    } catch (err) {
+      console.error('[SERVER] Error closing database pool:', err.message);
+      process.exit(1);
+    }
+  });
+};
+
+process.on('SIGTERM', gracefulShutdown);
+process.on('SIGINT', gracefulShutdown);
