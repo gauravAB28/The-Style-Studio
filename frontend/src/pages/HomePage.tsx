@@ -8,6 +8,7 @@ import { BeforeAfterSlider } from '../components/BeforeAfterSlider';
 import { CyclemonStudioShowcase } from '../components/CyclemonStudioShowcase';
 import { PitchModal } from '../components/PitchModal';
 import { useLayout } from '../components/Layout';
+import { assetPath } from '../utils/assetPath';
 
 export const HomePage: React.FC = () => {
   const { salon, handleAddToCart } = useLayout();
@@ -174,7 +175,7 @@ export const HomePage: React.FC = () => {
       {/* Before & After Slider */}
       <div className="px-4 sm:px-6 bg-[#faf6f0] py-6">
         <BeforeAfterSlider
-          beforeImage="/images/before_nails.jpg"
+          beforeImage={assetPath('/images/before_nails.jpg')}
           afterImage="https://thestylestudiolounge.com/wp-content/uploads/2026/03/WhatsApp-Image-2026-03-10-at-16.25.44-2.jpeg"
           title="Artisan Nail Sculpting &amp; Couture Finish"
           subtitle="Drag the interactive slider to compare natural unpolished nails with our hand-painted artisan extension and mirror shine finish."

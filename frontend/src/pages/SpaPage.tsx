@@ -5,6 +5,7 @@ import { Spa3DAtmosphere } from '../components/Spa3DAtmosphere';
 import { Spa3DTiltCard } from '../components/Spa3DTiltCard';
 import { useLayout } from '../components/Layout';
 import type { Service } from '../types';
+import { assetPath } from '../utils/assetPath';
 
 export const SpaPage: React.FC = () => {
   const { handleAddToCart } = useLayout();
@@ -107,7 +108,7 @@ export const SpaPage: React.FC = () => {
           {/* Full-Screen Photography */}
           <div className="absolute inset-0 z-0">
             <img
-              src="/images/spa/spa-hero.jpg"
+              src={assetPath('/images/spa/spa-hero.jpg')}
               alt="Spa Sanctuary Atmosphere"
               className="w-full h-full object-cover object-center select-none"
             />
@@ -259,7 +260,7 @@ export const SpaPage: React.FC = () => {
                     <div className="lg:col-span-7 relative aspect-[16/10] sm:aspect-[16/10] rounded-2xl sm:rounded-[26px] overflow-hidden shadow-xl bg-[#f5ecde] group">
                       <img
                         key={activeTreatment.id}
-                        src={activeTreatment.image}
+                        src={assetPath(activeTreatment.image)}
                         alt={activeTreatment.name}
                         className="w-full h-full object-cover transition-all duration-700 luxury-slide-in select-none"
                       />
@@ -547,19 +548,19 @@ export const SpaPage: React.FC = () => {
           <div className="max-w-6xl mx-auto">
             <div className="grid grid-cols-2 md:grid-cols-3 gap-2.5 sm:gap-4">
               {[
-                { img: '/images/spa/gallery-1.jpg', title: 'Thermal Steam Suite' },
-                { img: '/images/spa/gallery-2.jpg', title: 'Deep Tissue Recovery' },
-                { img: '/images/spa/gallery-3.jpg', title: 'Aromatherapy Apothecary' },
-                { img: '/images/spa/gallery-4.jpg', title: 'Warm Stone Therapy' },
-                { img: '/images/spa/gallery-5.jpg', title: 'Balinese Petal Bath' },
-                { img: '/images/spa/gallery-6.jpg', title: 'Restoration Lounge' }
+                { img: assetPath('/images/spa/gallery-1.jpg'), title: 'Thermal Steam Suite' },
+                { img: assetPath('/images/spa/gallery-2.jpg'), title: 'Deep Tissue Recovery' },
+                { img: assetPath('/images/spa/gallery-3.jpg'), title: 'Aromatherapy Apothecary' },
+                { img: assetPath('/images/spa/gallery-4.jpg'), title: 'Warm Stone Therapy' },
+                { img: assetPath('/images/spa/gallery-5.jpg'), title: 'Balinese Petal Bath' },
+                { img: assetPath('/images/spa/gallery-6.jpg'), title: 'Restoration Lounge' }
               ].map((item, idx) => (
                 <div
                   key={idx}
                   className="relative aspect-[4/3] rounded-2xl overflow-hidden shadow-sm hover:shadow-lg transition-all group"
                 >
                   <img
-                    src={item.img}
+                    src={assetPath(item.img)}
                     alt={item.title}
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                   />

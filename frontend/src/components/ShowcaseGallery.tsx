@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { assetPath } from '../utils/assetPath';
 
 interface GalleryItem {
   id: string;
@@ -60,7 +61,7 @@ const GALLERY_ITEMS: GalleryItem[] = [
   },
   {
     id: 'g7',
-    url: '/images/studio_nails.jpg',
+    url: assetPath('/images/studio_nails.jpg'),
     title: 'French Ombre & Champagne Chrome Nail Art',
     category: 'nails',
     tag: 'Couture Nail Art',
@@ -156,7 +157,7 @@ export const ShowcaseGallery: React.FC<ShowcaseGalleryProps> = ({ onBookItem }) 
             >
               <div className="relative aspect-[4/3] overflow-hidden bg-[#e8e0d5]">
                 <img
-                  src={item.url}
+                  src={assetPath(item.url)}
                   alt={item.title}
                   loading="lazy"
                   className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
@@ -208,7 +209,7 @@ export const ShowcaseGallery: React.FC<ShowcaseGalleryProps> = ({ onBookItem }) 
 
             <div className="relative aspect-video bg-[#000]">
               <img
-                src={selectedItem.url}
+                src={assetPath(selectedItem.url)}
                 alt={selectedItem.title}
                 className="w-full h-full object-contain"
               />

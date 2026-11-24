@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import type { Studio, Service } from '../types';
+import { assetPath } from '../utils/assetPath';
 
 interface StudiosUnderlayShowcaseProps {
   studios: Studio[];
@@ -29,7 +30,7 @@ export const StudiosUnderlayShowcase: React.FC<StudiosUnderlayShowcaseProps> = (
       description: 'Custom Balayage, Italian ammonia-free global shades, and 5-month mirror shine Keratin & Botox infusing pure botanical proteins.',
       featuredOffer: '40% OFF Royal Keratin',
       startingPrice: 499,
-      image: '/images/studio_hair.jpg',
+      image: assetPath('/images/studio_hair.jpg'),
       tagline: 'Precision Color, European Balayage & Botanical Keratin Infusion',
       portalColor: 'linear-gradient(135deg, rgba(230,210,195,0.4), rgba(43,92,255,0.15))',
       bgTint: '#f5eee6',
@@ -42,7 +43,7 @@ export const StudiosUnderlayShowcase: React.FC<StudiosUnderlayShowcaseProps> = (
       description: 'Camera-ready, waterproof 24hr bridal glow with international cosmetics, sculpted draping, and customized jewelry setting.',
       featuredOffer: '35% OFF Bridal Packages',
       startingPrice: 4499,
-      image: '/images/studio_bridal.jpg',
+      image: assetPath('/images/studio_bridal.jpg'),
       tagline: 'Bespoke Royal HD Bridal Glow & Designer Draping',
       portalColor: 'linear-gradient(135deg, rgba(245,225,215,0.4), rgba(43,92,255,0.15))',
       bgTint: '#f9ede8',
@@ -55,7 +56,7 @@ export const StudiosUnderlayShowcase: React.FC<StudiosUnderlayShowcaseProps> = (
       description: '7-step clinical hydro-infusion, peptide cold hammer tightening, and LED light therapies for pore refinement and glass glow.',
       featuredOffer: '25% OFF Hydra Facial',
       startingPrice: 1399,
-      image: '/images/studio_skin.jpg',
+      image: assetPath('/images/studio_skin.jpg'),
       tagline: 'Clinical Hydra Dermabrasion, Glass Skin & Collagen Therapy',
       portalColor: 'linear-gradient(135deg, rgba(220,230,240,0.4), rgba(43,92,255,0.15))',
       bgTint: '#eef3f7',
@@ -79,7 +80,7 @@ export const StudiosUnderlayShowcase: React.FC<StudiosUnderlayShowcaseProps> = (
   const displayStudios = (studios && studios.length > 0) ? studios.map((s, idx) => ({
     ...fallbackStudios[idx],
     ...s,
-    image: s.image || fallbackStudios[idx]?.image,
+    image: assetPath(s.image || fallbackStudios[idx]?.image || ''),
     tagline: s.tagline || fallbackStudios[idx]?.tagline
   })) : fallbackStudios;
 
@@ -100,7 +101,7 @@ export const StudiosUnderlayShowcase: React.FC<StudiosUnderlayShowcaseProps> = (
             >
               {/* Cinematic Underlay Image */}
               <img
-                src={s.image}
+                src={assetPath(s.image)}
                 alt={s.title}
                 className={`w-full h-full object-cover filter blur-[2px] transition-transform duration-1000 ease-out ${
                   isActive ? 'scale-105' : 'scale-100'
@@ -182,7 +183,7 @@ export const StudiosUnderlayShowcase: React.FC<StudiosUnderlayShowcaseProps> = (
                 {/* Architectural Arched Image Window with Zoom Parallax */}
                 <div className="relative aspect-[4/3] rounded-2xl overflow-hidden mb-5 border border-[#b89a73]/25 shadow-inner bg-[#f5eee6]">
                   <img
-                    src={studio.image}
+                    src={assetPath(studio.image)}
                     alt={studio.title}
                     className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-110"
                   />

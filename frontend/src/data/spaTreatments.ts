@@ -8,6 +8,8 @@ export interface SpaAromatherapyBlend {
   colorAccent: string;
 }
 
+import { assetPath } from '../utils/assetPath';
+
 export interface SpaTreatment {
   id: string;
   slug: string;
@@ -39,7 +41,7 @@ export const SPA_TREATMENTS: SpaTreatment[] = [
     ],
     bestFor: 'Dull skin, muscle stiffness, gentle detox and pre-celebration renewal',
     durationRange: '75 / 90 min',
-    image: '/images/spa/hammam.jpg',
+    image: assetPath('/images/spa/hammam.jpg'),
     category: 'ritual',
     number: '01',
   },
@@ -58,7 +60,7 @@ export const SPA_TREATMENTS: SpaTreatment[] = [
     ],
     bestFor: 'Physical exhaustion, tight shoulders, travel fatigue and deep relaxation',
     durationRange: '60 / 90 min',
-    image: '/images/spa/balinese.jpg',
+    image: assetPath('/images/spa/balinese.jpg'),
     category: 'massage',
     number: '02',
   },
@@ -77,7 +79,7 @@ export const SPA_TREATMENTS: SpaTreatment[] = [
     ],
     bestFor: 'First-time spa guests, mild tension, stress management and gentle relaxation',
     durationRange: '60 / 90 min',
-    image: '/images/spa/swedish.jpg',
+    image: assetPath('/images/spa/swedish.jpg'),
     category: 'massage',
     number: '03',
   },
@@ -96,7 +98,7 @@ export const SPA_TREATMENTS: SpaTreatment[] = [
     ],
     bestFor: 'Desk workers, athletes, chronic neck/back stiffness and stubborn knots',
     durationRange: '60 / 90 min',
-    image: '/images/spa/deep-tissue.jpg',
+    image: assetPath('/images/spa/deep-tissue.jpg'),
     category: 'massage',
     number: '04',
   },
@@ -115,7 +117,7 @@ export const SPA_TREATMENTS: SpaTreatment[] = [
     ],
     bestFor: 'Sensory overload, mental fatigue, mood enhancement and silky skin',
     durationRange: '60 / 90 min',
-    image: '/images/spa/aromatherapy.jpg',
+    image: assetPath('/images/spa/aromatherapy.jpg'),
     category: 'aromatherapy',
     number: '05',
     aromatherapyBlends: [

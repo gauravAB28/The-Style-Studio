@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import type { Studio } from '../types';
+import { assetPath } from '../utils/assetPath';
 
 interface CyclemonStudioShowcaseProps {
   studios: Studio[];
@@ -24,7 +25,7 @@ export const CyclemonStudioShowcase: React.FC<CyclemonStudioShowcaseProps> = ({
       description: 'Hand-blended caramel Balayage, ammonia-free Italian organic glosses, and 5-month mirror shine Keratin & Botox infusing pure botanical proteins.',
       offerBadge: '40% OFF Royal Keratin',
       startingPrice: 499,
-      image: '/images/studio_hair.jpg',
+      image: assetPath('/images/studio_hair.jpg'),
       tags: ['Custom Balayage', 'Italian Gloss', 'Botox Infusion', 'Precision Cut'],
       align: 'left' as const,
       gradientLg: 'from-[#faf6f0]/95 via-[#faf6f0]/75 to-[#faf6f0]/30',
@@ -40,7 +41,7 @@ export const CyclemonStudioShowcase: React.FC<CyclemonStudioShowcaseProps> = ({
       description: 'Camera-ready, sweatproof 24-hour HD airbrush glow crafted with imported cosmetics, bespoke jewelry setting, and precision bridal dupatta draping in private luxury suites.',
       offerBadge: '35% OFF Bridal Packages',
       startingPrice: 4499,
-      image: '/images/studio_bridal.jpg',
+      image: assetPath('/images/studio_bridal.jpg'),
       tags: ['HD Airbrush', 'Kundan Setting', 'Sculpted Draping', 'Private Suite'],
       align: 'right' as const,
       gradientLg: 'from-[#faf6f0]/30 via-[#faf6f0]/75 to-[#faf6f0]/95',
@@ -56,7 +57,7 @@ export const CyclemonStudioShowcase: React.FC<CyclemonStudioShowcaseProps> = ({
       description: '7-step European hydro-infusion, peptide cold hammer contouring, and medical-grade LED phototherapy for deep pore refinement, hydration, and glass-like dewiness.',
       offerBadge: '25% OFF Hydra Facial',
       startingPrice: 1399,
-      image: '/images/studio_skin.jpg',
+      image: assetPath('/images/studio_skin.jpg'),
       tags: ['Hydro-Infusion', 'Cold Hammer', 'LED Phototherapy', 'Collagen Lift'],
       align: 'left' as const,
       gradientLg: 'from-[#faf6f0]/95 via-[#faf6f0]/75 to-[#faf6f0]/30',
@@ -72,7 +73,7 @@ export const CyclemonStudioShowcase: React.FC<CyclemonStudioShowcaseProps> = ({
       description: 'Artisan French chrome tips, bespoke hand-painted nail art, sculpted gel extensions, and effervescent ice cream bubble pedicures with botanical paraffin.',
       offerBadge: '30% OFF Nail Extensions',
       startingPrice: 899,
-      image: '/images/studio_nails.jpg',
+      image: assetPath('/images/studio_nails.jpg'),
       tags: ['Chrome Dusting', 'Gel Sculpting', 'Russian Manicure', 'Paraffin Spa'],
       align: 'right' as const,
       gradientLg: 'from-[#faf6f0]/30 via-[#faf6f0]/75 to-[#faf6f0]/95',
@@ -88,7 +89,7 @@ export const CyclemonStudioShowcase: React.FC<CyclemonStudioShowcaseProps> = ({
       description: 'An unhurried sanctuary of Turkish Hammam steam, Balinese acupressure, Swedish restorative flow, and bespoke Aromatherapy. Each ritual is performed with care, and felt long after you leave.',
       offerBadge: '30% Wellness Privilege',
       startingPrice: 0,
-      image: '/images/spa/spa-hero.jpg',
+      image: assetPath('/images/spa/spa-hero.jpg'),
       tags: ['Turkish Hammam', 'Balinese Massage', 'Swedish Ritual', 'Aromatherapy'],
       align: 'left' as const,
       gradientLg: 'from-[#faf6f0]/95 via-[#faf6f0]/75 to-[#faf6f0]/30',
@@ -187,7 +188,7 @@ export const CyclemonStudioShowcase: React.FC<CyclemonStudioShowcaseProps> = ({
             {/* ── FIXED UNDERLAY BACKGROUND ── */}
             <div className="cyclemon-fixed-underlay">
               <img
-                src={item.image}
+                src={assetPath(item.image)}
                 alt={item.title}
                 loading={idx === 0 ? 'eager' : 'lazy'}
                 className="w-full h-full object-cover select-none"

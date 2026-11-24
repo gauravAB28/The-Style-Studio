@@ -1,4 +1,5 @@
 import React, { useState, useRef, useCallback } from 'react';
+import { assetPath } from '../utils/assetPath';
 
 interface BeforeAfterSliderProps {
   beforeImage: string;
@@ -82,7 +83,7 @@ export const BeforeAfterSlider: React.FC<BeforeAfterSliderProps> = ({
       >
         {/* After Image (Background) */}
         <img
-          src={afterImage}
+          src={assetPath(afterImage)}
           alt="After salon transformation"
           loading="lazy"
           className="absolute inset-0 w-full h-full object-cover pointer-events-none select-none"
@@ -97,7 +98,7 @@ export const BeforeAfterSlider: React.FC<BeforeAfterSliderProps> = ({
           style={{ width: `${sliderPosition}%` }}
         >
           <img
-            src={beforeImage}
+            src={assetPath(beforeImage)}
             alt="Before salon treatment"
             loading="lazy"
             className="absolute top-0 left-0 max-w-none w-full h-full object-cover"
