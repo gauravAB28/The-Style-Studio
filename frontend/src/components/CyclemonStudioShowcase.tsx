@@ -98,7 +98,7 @@ export const CyclemonStudioShowcase: React.FC<CyclemonStudioShowcaseProps> = ({
 
   // Merge backend data if available
   const list = studioData.map((item, idx) => {
-    const backend = studios?.[idx];
+    const backend = studios.find((s) => s.id === item.id) || (studios[idx] as any);
     if (!backend) return item;
     return {
       ...item,
@@ -138,7 +138,7 @@ export const CyclemonStudioShowcase: React.FC<CyclemonStudioShowcaseProps> = ({
   };
 
   return (
-    <div className="relative">
+    <div id="studios" className="relative">
       {/* ─── DESKTOP CYCLEMON FIXED SIDE NAVIGATION ─── */}
       <nav 
         aria-label="Studios Navigator"
@@ -151,12 +151,14 @@ export const CyclemonStudioShowcase: React.FC<CyclemonStudioShowcaseProps> = ({
               key={item.id}
               type="button"
               onClick={() => scrollToStudio(item.id)}
-              className="group relative flex items-center justify-end p-2"
+              className="group relative flex items-center justify-end p-2 min-h-[44px] min-w-[44px]"
               title={`Jump to ${item.title}`}
+              aria-label={`Jump to studio ${item.title}`}
             >
               <span className="absolute right-9 px-3 py-1 rounded-full bg-[#1a1614] text-white text-[11px] font-mono tracking-wider opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none whitespace-nowrap shadow-lg">
-                {item.number} {item.title}
+                0{idx + 1} {item.title}
               </span>
+
               <span 
                 className={`block rounded-full transition-all duration-300 ${
                   isActive 
@@ -187,6 +189,7 @@ export const CyclemonStudioShowcase: React.FC<CyclemonStudioShowcaseProps> = ({
               <img
                 src={item.image}
                 alt={item.title}
+                loading={idx === 0 ? 'eager' : 'lazy'}
                 className="w-full h-full object-cover select-none"
                 onError={(e) => {
                   const target = e.currentTarget;
@@ -215,7 +218,7 @@ export const CyclemonStudioShowcase: React.FC<CyclemonStudioShowcaseProps> = ({
                     isLeft ? 'lg:col-span-7 lg:col-start-1 lg:mx-0' : 'lg:col-span-7 lg:col-start-6 lg:mx-0'
                   }`}
                 >
-                  <div className="cream-card bg-white/94 backdrop-blur-2xl border border-[#b89a73]/35 rounded-3xl sm:rounded-[32px] p-6 sm:p-9 md:p-10 shadow-[0_20px_50px_-15px_rgba(100,80,60,0.15)] space-y-4 sm:space-y-5 transition-all duration-300 hover:shadow-[0_25px_60px_-10px_rgba(47,84,235,0.18)] hover:border-[#2f54eb]/40">
+                  <div className="cream-card bg-white/95 backdrop-blur-2xl border border-[#b89a73]/35 rounded-3xl sm:rounded-[32px] p-5 sm:p-8 md:p-10 shadow-[0_20px_50px_-15px_rgba(100,80,60,0.15)] space-y-4 sm:space-y-5 transition-all duration-300 hover:shadow-[0_25px_60px_-10px_rgba(47,84,235,0.18)] hover:border-[#2f54eb]/40">
                     
                     {/* Header Tag & Studio Number */}
                     <div className="flex items-center justify-between border-b border-[#b89a73]/20 pb-3 sm:pb-4">
@@ -230,9 +233,9 @@ export const CyclemonStudioShowcase: React.FC<CyclemonStudioShowcaseProps> = ({
                       </div>
                     </div>
 
-                    {/* Studio Title */}
+                    {/* Studio Title with Fluid Typography */}
                     <div>
-                      <h2 className="font-serif-luxury italic text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-medium tracking-tight text-[#1a1614] leading-[1.08]">
+                      <h2 className="font-serif-luxury italic text-[clamp(1.85rem,5vw,3.75rem)] font-medium tracking-tight text-[#1a1614] leading-[1.08]">
                         {item.title}
                       </h2>
                       <p className={`text-xs sm:text-sm font-mono uppercase tracking-wider font-semibold mt-1 ${item.isSpa ? 'text-[#c59b4b]' : 'text-[#2f54eb]'}`}>
@@ -241,7 +244,7 @@ export const CyclemonStudioShowcase: React.FC<CyclemonStudioShowcaseProps> = ({
                     </div>
 
                     {/* Tagline */}
-                    <blockquote className="font-serif-luxury text-lg sm:text-xl md:text-2xl text-[#3d3632] italic font-light border-l-2 border-[#c59b4b] pl-3.5 sm:pl-4">
+                    <blockquote className="font-serif-luxury text-base sm:text-xl md:text-2xl text-[#3d3632] italic font-light border-l-2 border-[#c59b4b] pl-3.5 sm:pl-4">
                       "{item.tagline}"
                     </blockquote>
 
@@ -255,7 +258,7 @@ export const CyclemonStudioShowcase: React.FC<CyclemonStudioShowcaseProps> = ({
                       {item.tags.map((tag) => (
                         <span
                           key={tag}
-                          className="px-2.5 sm:px-3 py-0.5 sm:py-1 bg-[#faf6f0] border border-[#b89a73]/25 rounded-full text-[11px] sm:text-xs font-medium text-[#1a1614] shadow-sm"
+                          className="px-2.5 sm:px-3 py-1 bg-[#faf6f0] border border-[#b89a73]/25 rounded-full text-[11px] sm:text-xs font-medium text-[#1a1614] shadow-sm"
                         >
                           ✦ {tag}
                         </span>
@@ -266,7 +269,7 @@ export const CyclemonStudioShowcase: React.FC<CyclemonStudioShowcaseProps> = ({
                     {item.isSpa ? (
                       <div className="flex flex-wrap items-center justify-between gap-3 sm:gap-4 pt-3 sm:pt-4 border-t border-[#b89a73]/20">
                         <div>
-                          <span className="text-[10px] font-mono text-[#8c827a] uppercase tracking-wider block mb-1">
+                          <span className="text-[10px] font-mono text-[#8c827a] uppercase tracking-wider block mb-0.5">
                             Signature Studio 05
                           </span>
                           <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#c59b4b]/15 text-[#855e16] text-xs font-semibold border border-[#c59b4b]/30">
@@ -276,7 +279,7 @@ export const CyclemonStudioShowcase: React.FC<CyclemonStudioShowcaseProps> = ({
                         </div>
                         <Link
                           to="/spa"
-                          className="btn-royal-blue text-xs sm:text-sm py-2.5 sm:py-3 px-5 sm:px-6 font-semibold shadow-lg"
+                          className="btn-royal-blue text-xs sm:text-sm py-3 px-5 sm:px-6 font-semibold shadow-lg min-h-[44px] flex items-center"
                         >
                           Explore the Spa →
                         </Link>
@@ -299,7 +302,7 @@ export const CyclemonStudioShowcase: React.FC<CyclemonStudioShowcaseProps> = ({
                         <button
                           type="button"
                           onClick={() => onBookStudio?.(item.title)}
-                          className="btn-royal-blue text-xs sm:text-sm py-2.5 sm:py-3 px-5 sm:px-6 font-semibold shadow-lg"
+                          className="btn-royal-blue text-xs sm:text-sm py-3 px-5 sm:px-6 font-semibold shadow-lg min-h-[44px]"
                         >
                           Reserve {item.title.split(' ')[0]} ➔
                         </button>
@@ -315,13 +318,14 @@ export const CyclemonStudioShowcase: React.FC<CyclemonStudioShowcaseProps> = ({
                             key={st.id}
                             type="button"
                             onClick={() => scrollToStudio(st.id)}
-                            className={`px-2 py-0.5 rounded text-[10px] font-bold transition-colors ${
+                            className={`w-8 h-8 rounded-full text-xs font-bold transition-colors flex items-center justify-center min-h-[36px] min-w-[36px] ${
                               idx === i 
                                 ? st.isSpa ? 'bg-[#c59b4b] text-white' : 'bg-[#2f54eb] text-white'
-                                : 'bg-[#faf6f0] text-[#5e5650] hover:text-black'
+                                : 'bg-[#faf6f0] text-[#5e5650] hover:text-black border border-[#b89a73]/20'
                             }`}
+                            aria-label={`Jump to studio 0${i + 1}`}
                           >
-                            {st.number}
+                            0{i + 1}
                           </button>
                         ))}
                       </div>

@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { SPA_TREATMENTS } from '../data/spaTreatments';
 import { Spa3DAtmosphere } from '../components/Spa3DAtmosphere';
 import { Spa3DTiltCard } from '../components/Spa3DTiltCard';
@@ -7,7 +7,8 @@ import { useLayout } from '../components/Layout';
 import type { Service } from '../types';
 
 export const SpaPage: React.FC = () => {
-  const { handleAddToCart, setIsBookingOpen } = useLayout();
+  const { handleAddToCart } = useLayout();
+  const navigate = useNavigate();
   
   // Rituals Auto-Slider State
   const [selectedRitualIndex, setSelectedRitualIndex] = useState<number>(0);
@@ -148,7 +149,7 @@ export const SpaPage: React.FC = () => {
             <div className="flex flex-col sm:flex-row items-center justify-center gap-3.5 sm:gap-4">
               <button
                 type="button"
-                onClick={() => setIsBookingOpen(true)}
+                onClick={() => navigate('/booking')}
                 className="w-full sm:w-auto btn-royal-blue text-xs sm:text-sm py-3.5 px-8 font-semibold shadow-xl shadow-[#2f54eb]/30 hover:scale-[1.02] transition-all"
               >
                 Reserve Your Ritual ➔
@@ -590,7 +591,7 @@ export const SpaPage: React.FC = () => {
             <div className="flex flex-col sm:flex-row items-center justify-center gap-3 pt-2">
               <button
                 type="button"
-                onClick={() => setIsBookingOpen(true)}
+                onClick={() => navigate('/booking')}
                 className="w-full sm:w-auto btn-royal-blue text-xs sm:text-sm py-3.5 px-8 font-semibold shadow-xl shadow-[#2f54eb]/25"
               >
                 Book Appointment ➔

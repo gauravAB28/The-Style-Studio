@@ -62,28 +62,28 @@ export const ProductShowcase: React.FC<ProductShowcaseProps> = ({ onAddProduct }
   const activeProduct = LUXURY_PRODUCTS[activeTab];
 
   return (
-    <section id="products" className="py-24 px-6 border-t border-[#b89a73]/20 bg-[#faf6f0]">
+    <section id="products" className="py-16 sm:py-24 px-4 sm:px-6 border-t border-[#b89a73]/20 bg-[#faf6f0] overflow-hidden">
       <div className="max-w-7xl mx-auto">
-        <div className="max-w-2xl mb-12">
+        <div className="max-w-2xl mb-10 sm:mb-12">
           <span className="text-xs font-mono uppercase tracking-widest text-[#2f54eb] font-semibold">
             Signature Salon Formulations
           </span>
-          <h2 className="font-serif-luxury italic text-4xl sm:text-5xl font-medium text-[#1a1614] mt-2">
+          <h2 className="font-serif-luxury italic text-[clamp(2rem,5vw,3rem)] font-medium text-[#1a1614] mt-2 leading-tight">
             The Apothecary Treatments
           </h2>
-          <p className="text-sm text-[#5e5650] mt-3 font-light leading-relaxed">
+          <p className="text-xs sm:text-sm text-[#5e5650] mt-3 font-light leading-relaxed">
             Inspired by European salon laboratories. Every session incorporates medical-grade, cruelty-free active formulations tailored to your hair density and skin tone.
           </p>
         </div>
 
-        {/* Product Selector Tabs */}
-        <div className="flex gap-2 overflow-x-auto pb-4 mb-8">
+        {/* Product Selector Tabs with native scroll & no horizontal overflow */}
+        <div className="flex gap-2 overflow-x-auto pb-4 mb-8 no-scrollbar touch-pan-x max-w-full">
           {LUXURY_PRODUCTS.map((prod, idx) => (
             <button
               key={prod.id}
               type="button"
               onClick={() => setActiveTab(idx)}
-              className={`px-5 py-2.5 rounded-full text-xs font-semibold whitespace-nowrap transition-all flex items-center gap-2 ${
+              className={`px-4 sm:px-5 py-2.5 rounded-full text-xs font-semibold whitespace-nowrap transition-all flex items-center gap-2 min-h-[44px] flex-shrink-0 ${
                 activeTab === idx
                   ? 'bg-[#2f54eb] text-white shadow-lg'
                   : 'bg-white text-[#5e5650] hover:text-[#1a1614] border border-[#b89a73]/25 shadow-sm'
@@ -96,10 +96,10 @@ export const ProductShowcase: React.FC<ProductShowcaseProps> = ({ onAddProduct }
         </div>
 
         {/* Clean Luxury Product Stage */}
-        <div className="cream-card rounded-3xl p-8 sm:p-12 border border-[#b89a73]/30 shadow-xl bg-white grid lg:grid-cols-12 gap-10 items-center">
-          <div className="lg:col-span-7 space-y-5">
-            <div className="flex items-center gap-3">
-              <span className="px-3.5 py-1 rounded-full bg-[#c59b4b]/15 text-[#855e16] text-xs font-bold tracking-wider uppercase">
+        <div className="cream-card rounded-3xl p-5 sm:p-8 md:p-12 border border-[#b89a73]/30 shadow-xl bg-white grid lg:grid-cols-12 gap-8 lg:gap-10 items-center">
+          <div className="lg:col-span-7 space-y-4 sm:space-y-5">
+            <div className="flex flex-wrap items-center gap-2 sm:gap-3">
+              <span className="px-3.5 py-1 rounded-full bg-[#c59b4b]/15 text-[#855e16] text-[11px] sm:text-xs font-bold tracking-wider uppercase">
                 {activeProduct.badge}
               </span>
               <span className="text-xs text-[#8c827a] font-mono">
@@ -107,15 +107,15 @@ export const ProductShowcase: React.FC<ProductShowcaseProps> = ({ onAddProduct }
               </span>
             </div>
 
-            <h3 className="font-serif-luxury text-3xl sm:text-4xl font-semibold text-[#1a1614] leading-tight">
+            <h3 className="font-serif-luxury text-[clamp(1.75rem,4vw,2.25rem)] font-semibold text-[#1a1614] leading-tight">
               {activeProduct.name}
             </h3>
 
-            <p className="text-sm text-[#8a651f] font-serif-luxury italic text-xl">
+            <p className="font-serif-luxury text-lg sm:text-xl text-[#8a651f] italic">
               "{activeProduct.tagline}"
             </p>
 
-            <p className="text-xs text-[#5e5650] leading-relaxed max-w-xl font-light">
+            <p className="text-xs sm:text-sm text-[#5e5650] leading-relaxed max-w-xl font-light">
               {activeProduct.description}
             </p>
 
@@ -124,11 +124,11 @@ export const ProductShowcase: React.FC<ProductShowcaseProps> = ({ onAddProduct }
               <span className="text-[11px] uppercase tracking-wider text-[#8c827a] font-semibold block mb-2">
                 Active Botanical Infusion:
               </span>
-              <div className="flex flex-wrap gap-2">
+              <div className="flex flex-wrap gap-1.5 sm:gap-2">
                 {activeProduct.ingredients.map((ing, i) => (
                   <span
                     key={i}
-                    className="px-3 py-1 rounded-xl bg-[#faf4ec] text-[#3d3632] text-xs border border-[#b89a73]/20"
+                    className="px-2.5 sm:px-3 py-1 rounded-xl bg-[#faf4ec] text-[#3d3632] text-xs border border-[#b89a73]/20"
                   >
                     ✓ {ing}
                   </span>
@@ -136,12 +136,12 @@ export const ProductShowcase: React.FC<ProductShowcaseProps> = ({ onAddProduct }
               </div>
             </div>
 
-            <div className="pt-6 border-t border-[#b89a73]/15 flex items-center gap-6">
+            <div className="pt-5 sm:pt-6 border-t border-[#b89a73]/15 flex flex-wrap items-center justify-between gap-4">
               <div>
-                <span className="text-3xl font-bold text-[#8a651f] font-serif-luxury">
+                <span className="text-2xl sm:text-3xl font-bold text-[#8a651f] font-serif-luxury">
                   ₹{activeProduct.price}
                 </span>
-                <span className="text-sm text-slate-400 line-through ml-2">
+                <span className="text-xs sm:text-sm text-slate-400 line-through ml-2">
                   ₹{activeProduct.originalPrice}
                 </span>
               </div>
@@ -161,7 +161,7 @@ export const ProductShowcase: React.FC<ProductShowcaseProps> = ({ onAddProduct }
                   };
                   onAddProduct(s);
                 }}
-                className="btn-royal-blue text-xs py-3 px-7 font-semibold"
+                className="btn-royal-blue text-xs sm:text-sm py-3 px-6 sm:px-7 font-semibold min-h-[44px] w-full sm:w-auto"
               >
                 + Book Treatment Session
               </button>
@@ -169,18 +169,19 @@ export const ProductShowcase: React.FC<ProductShowcaseProps> = ({ onAddProduct }
           </div>
 
           {/* Right: Elegant Editorial Product Showcase Photo */}
-          <div className="lg:col-span-5 relative aspect-square rounded-3xl overflow-hidden border border-[#b89a73]/30 shadow-md">
+          <div className="lg:col-span-5 relative aspect-[4/3] sm:aspect-square rounded-2xl sm:rounded-3xl overflow-hidden border border-[#b89a73]/30 shadow-md">
             <img
               src="https://thestylestudiolounge.com/wp-content/uploads/2026/02/WhatsApp-Image-2026-02-28-at-10.29.31-1.jpeg"
               alt="Salon Treatment Formulations"
+              loading="lazy"
               className="w-full h-full object-cover"
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent flex items-end p-6 text-white">
+            <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent flex items-end p-5 sm:p-6 text-white">
               <div>
                 <span className="px-2.5 py-0.5 rounded-full bg-[#2f54eb] text-white text-[10px] font-bold uppercase tracking-wider">
                   Authentic Formulations
                 </span>
-                <h4 className="font-serif-luxury text-xl font-medium mt-1">Italian & European Blends</h4>
+                <h4 className="font-serif-luxury text-lg sm:text-xl font-medium mt-1">Italian &amp; European Blends</h4>
               </div>
             </div>
           </div>

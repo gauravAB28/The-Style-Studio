@@ -35,7 +35,7 @@ html {
 
 body {
   overflow-x: hidden;
-  min-height: 100vh;
+  min-height: 100dvh;
   background-color: var(--bg-cream-primary);
   background-image: 
     radial-gradient(circle at 10% 20%, rgba(245, 235, 220, 0.8) 0%, transparent 40%),
@@ -390,3 +390,29 @@ body {
 }
 
 
+
+/* ── MOBILE FORM & SAFE AREA UTILITIES ─────────────────────────────────── */
+input, select, textarea {
+  font-size: 16px;
+}
+@media (min-width: 640px) {
+  input, select, textarea {
+    font-size: inherit;
+  }
+}
+
+.safe-area-bottom {
+  padding-bottom: max(0.75rem, env(safe-area-inset-bottom, 0.75rem));
+}
+.safe-area-top {
+  padding-top: max(0.75rem, env(safe-area-inset-top, 0.75rem));
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
