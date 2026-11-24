@@ -104,7 +104,7 @@ export const SpaPage: React.FC = () => {
       <div className="min-h-screen bg-[#faf7f2] text-[#1a1614] overflow-x-hidden selection:bg-[#2f54eb] selection:text-white">
         
         {/* ── 1. CINEMATIC 3D SANCTUARY HERO ─────────────────────────────────── */}
-        <section className="relative min-h-[92vh] sm:min-h-screen flex items-center justify-center overflow-hidden pt-20 sm:pt-24 pb-16 px-4">
+        <section className="relative min-h-[72dvh] sm:min-h-[85dvh] lg:min-h-screen flex items-center justify-center overflow-hidden pt-16 sm:pt-24 pb-10 sm:pb-16 px-3 sm:px-4">
           {/* Full-Screen Photography */}
           <div className="absolute inset-0 z-0">
             <img
@@ -120,7 +120,7 @@ export const SpaPage: React.FC = () => {
           <Spa3DAtmosphere variant="hero" className="z-10" />
 
           {/* Hero Content */}
-          <div className="relative z-20 text-center max-w-4xl mx-auto px-4 py-8">
+          <div className="relative z-20 text-center max-w-4xl mx-auto px-1 sm:px-4 py-4 sm:py-8">
             <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/15 backdrop-blur-md border border-[#c59b4b]/40 text-[#f5ecd8] text-xs font-mono uppercase tracking-[0.18em] shadow-lg mb-6">
               <span className="w-2 h-2 rounded-full bg-[#c59b4b] animate-pulse" />
               <span>Studio 05 · 30% Privilege Included</span>

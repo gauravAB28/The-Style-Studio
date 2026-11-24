@@ -90,7 +90,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, onSuccess
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-md">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4 bg-black/60 backdrop-blur-md overflow-y-auto">
       {/* Simulated SMS Toast notification at top */}
       {smsToast && (
         <div className="fixed top-6 left-1/2 -translate-x-1/2 z-50 max-w-md w-[90%] bg-white border border-[#2f54eb]/30 rounded-2xl p-4 shadow-2xl flex items-start gap-3 animate-bounce">
@@ -124,11 +124,11 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, onSuccess
         </div>
       )}
 
-      <div className="relative w-full max-w-md bg-white border border-[#b89a73]/30 rounded-3xl p-8 shadow-2xl animate-pop-in">
+      <div className="relative w-full max-w-md max-h-[92dvh] overflow-y-auto bg-white border border-[#b89a73]/30 rounded-3xl p-4 sm:p-8 shadow-2xl animate-pop-in my-auto">
         <button
           type="button"
           onClick={onClose}
-          className="absolute top-6 right-6 w-9 h-9 rounded-full bg-[#faf6f0] hover:bg-slate-200 text-slate-500 hover:text-black flex items-center justify-center transition-colors"
+          className="absolute top-3 sm:top-6 right-3 sm:right-6 w-11 h-11 rounded-full bg-[#faf6f0] hover:bg-slate-200 text-slate-500 hover:text-black flex items-center justify-center transition-colors z-10"
         >
           ✕
         </button>

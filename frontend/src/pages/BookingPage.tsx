@@ -167,7 +167,7 @@ export const BookingPage: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#faf7f2] pt-24 sm:pt-28 pb-32 sm:pb-24 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-[#faf7f2] pt-20 sm:pt-28 pb-28 sm:pb-24 px-3 sm:px-6 lg:px-8">
       <div className="max-w-6xl mx-auto">
         
         {/* Top Back Navigation Breadcrumb */}
@@ -483,7 +483,7 @@ export const BookingPage: React.FC = () => {
                     )}
                   </div>
                 ) : (
-                  <div className="flex gap-2">
+                  <div className="flex flex-col sm:flex-row gap-2">
                     <input
                       type="text"
                       value={couponInput}

@@ -197,12 +197,12 @@ export const ShowcaseGallery: React.FC<ShowcaseGalleryProps> = ({ onBookItem }) 
 
       {/* Lightbox Modal */}
       {selectedItem && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md">
-          <div className="relative w-full max-w-3xl bg-[#faf6f0] border border-[#b89a73]/40 rounded-3xl overflow-hidden shadow-2xl animate-pop-in">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4 bg-black/80 backdrop-blur-md overflow-y-auto">
+          <div className="relative w-full max-w-3xl max-h-[94dvh] overflow-y-auto bg-[#faf6f0] border border-[#b89a73]/40 rounded-3xl shadow-2xl animate-pop-in my-auto">
             <button
               type="button"
               onClick={() => setSelectedItem(null)}
-              className="absolute top-4 right-4 z-10 w-10 h-10 rounded-full bg-white/80 hover:bg-white text-slate-700 hover:text-black flex items-center justify-center transition-colors shadow-md text-base"
+              className="absolute top-3 right-3 z-10 w-11 h-11 rounded-full bg-white/80 hover:bg-white text-slate-700 hover:text-black flex items-center justify-center transition-colors shadow-md text-base"
             >
               ✕
             </button>

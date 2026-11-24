@@ -33,11 +33,11 @@ export const PitchModal: React.FC<PitchModalProps> = ({ isOpen, onClose }) => {
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-md">
-      <div className="relative w-full max-w-3xl max-h-[90vh] overflow-y-auto bg-[#0d1322] border border-blue-500/30 rounded-3xl p-8 shadow-2xl animate-pop-in">
+      <div className="relative w-full max-w-3xl max-h-[92dvh] overflow-y-auto bg-[#0d1322] border border-blue-500/30 rounded-3xl p-4 sm:p-8 shadow-2xl animate-pop-in">
         <button
           type="button"
           onClick={onClose}
-          className="absolute top-6 right-6 w-9 h-9 rounded-full bg-white/5 hover:bg-white/10 text-slate-400 hover:text-white flex items-center justify-center transition-colors"
+          className="absolute top-3 right-3 sm:top-6 sm:right-6 w-11 h-11 rounded-full bg-white/5 hover:bg-white/10 text-slate-400 hover:text-white flex items-center justify-center transition-colors"
         >
           ✕
         </button>

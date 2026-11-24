@@ -35,11 +35,35 @@ html {
 
 body {
   overflow-x: hidden;
+  width: 100%;
   min-height: 100dvh;
   background-color: var(--bg-cream-primary);
   background-image: 
     radial-gradient(circle at 10% 20%, rgba(245, 235, 220, 0.8) 0%, transparent 40%),
     radial-gradient(circle at 90% 80%, rgba(238, 226, 208, 0.6) 0%, transparent 40%);
+}
+
+img, video, svg, canvas {
+  max-width: 100%;
+}
+
+@media (max-width: 639px) {
+  .cream-card,
+  .glass-nav-cream,
+  [role="dialog"],
+  form {
+    max-width: 100%;
+  }
+
+  .btn-royal-blue,
+  .btn-outline-cream {
+    min-height: 44px;
+  }
+
+  button,
+  a {
+    -webkit-tap-highlight-color: transparent;
+  }
 }
 
 .font-serif-luxury {

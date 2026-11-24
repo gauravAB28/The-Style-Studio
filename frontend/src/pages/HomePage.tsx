@@ -49,7 +49,7 @@ export const HomePage: React.FC = () => {
   return (
     <>
       {/* Hero Section */}
-      <section id="home" className="relative pt-24 sm:pt-36 pb-16 sm:pb-24 px-4 sm:px-6 overflow-hidden min-h-[90vh] flex items-center">
+      <section id="home" className="relative pt-20 sm:pt-28 lg:pt-36 pb-10 sm:pb-16 lg:pb-24 px-3 sm:px-6 overflow-hidden min-h-0 lg:min-h-[90vh] flex items-center">
         <div className="absolute top-10 -left-10 sm:left-1/4 w-full max-w-[600px] h-[400px] bg-gradient-to-b from-[#f2e2cf]/50 via-[#f9efe2]/20 to-transparent blur-3xl pointer-events-none rounded-full" />
 
         <div className="max-w-7xl mx-auto w-full relative grid lg:grid-cols-12 gap-8 lg:gap-12 items-center">
@@ -72,17 +72,17 @@ export const HomePage: React.FC = () => {
               Step into Derabassi's premier unisex salon. Explore our transparent pricing catalog, discover verified client transformations, and book your appointment with instant online reservation.
             </p>
 
-            <div className="flex flex-wrap items-center gap-3 sm:gap-4 pt-2">
+            <div className="flex flex-col sm:flex-row flex-wrap items-stretch sm:items-center gap-3 sm:gap-4 pt-2">
               <button
                 type="button"
                 onClick={() => navigate('/booking')}
-                className="btn-royal-blue text-xs sm:text-sm py-3 px-6 sm:px-8 shadow-lg min-h-[44px]"
+                className="w-full sm:w-auto justify-center btn-royal-blue text-xs sm:text-sm py-3 px-5 sm:px-8 shadow-lg min-h-[44px]"
               >
                 Reserve Your Visit
               </button>
               <a
                 href="#treatments"
-                className="btn-outline-cream text-xs sm:text-sm py-3 px-5 sm:px-6 shadow-sm min-h-[44px] flex items-center"
+                className="w-full sm:w-auto justify-center btn-outline-cream text-xs sm:text-sm py-3 px-5 sm:px-6 shadow-sm min-h-[44px] flex items-center"
               >
                 Explore Pricing Menu ➔
               </a>
@@ -250,9 +250,9 @@ export const HomePage: React.FC = () => {
             {filteredServices.map((service) => (
               <div
                 key={service.id}
-                className="p-4 sm:p-5 rounded-2xl bg-white border border-[#b89a73]/25 hover:border-[#b89a73]/50 hover:shadow-md transition-all flex justify-between items-center group gap-3"
+                className="p-3.5 sm:p-5 rounded-2xl bg-white border border-[#b89a73]/25 hover:border-[#b89a73]/50 hover:shadow-md transition-all flex flex-col sm:flex-row justify-between items-stretch sm:items-center group gap-3 min-w-0"
               >
-                <div className="space-y-1 pr-2 min-w-0">
+                <div className="space-y-1 pr-0 sm:pr-2 min-w-0 w-full">
                   <div className="flex items-center gap-2 flex-wrap">
                     <span className="font-serif-luxury text-lg sm:text-xl font-medium text-[#1a1614] group-hover:text-[#2f54eb] transition-colors truncate">
                       {service.name}
@@ -267,7 +267,7 @@ export const HomePage: React.FC = () => {
                     </p>
                   )}
                 </div>
-                <div className="flex items-center gap-3 sm:gap-4 flex-shrink-0">
+                <div className="flex items-center justify-between sm:justify-end gap-3 sm:gap-4 flex-shrink-0 w-full sm:w-auto">
                   <div className="text-right">
                     {service.price !== null && service.price !== undefined ? (
                       <>
@@ -362,7 +362,7 @@ export const HomePage: React.FC = () => {
                     ))}
                   </ul>
                 </div>
-                <div className="pt-4 border-t border-[#b89a73]/15 flex justify-between items-center">
+                <div className="pt-4 border-t border-[#b89a73]/15 flex flex-col sm:flex-row justify-between items-stretch sm:items-center gap-3">
                   <div>
                     <span className="text-2xl font-bold text-[#8a651f] font-serif-luxury">
                       ₹{offer.price}
@@ -390,7 +390,7 @@ export const HomePage: React.FC = () => {
                       handleAddToCart(sampleService);
                       navigate(`/booking?coupon=${offer.code}`);
                     }}
-                    className="btn-royal-blue text-xs py-2.5 px-5 font-semibold min-h-[44px]"
+                    className="w-full sm:w-auto justify-center btn-royal-blue text-xs py-2.5 px-5 font-semibold min-h-[44px]"
                   >
                     Claim Offer
                   </button>

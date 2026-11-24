@@ -226,7 +226,7 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
 
         {/* ── UNIFIED LUXURY HEADER ── */}
         <header className="fixed top-0 inset-x-0 z-40 glass-nav-cream transition-all">
-          <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 h-16 sm:h-20 flex items-center justify-between gap-2 sm:gap-3">
+          <div className="max-w-7xl mx-auto px-2.5 sm:px-6 lg:px-8 h-16 sm:h-20 flex items-center justify-between gap-1.5 sm:gap-3">
             
             {/* Left: Back button (on non-home pages) + Brand Logo */}
             <div className="flex items-center gap-1.5 sm:gap-3 min-w-0">
@@ -238,13 +238,13 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
                   aria-label="Go back to previous page"
                 >
                   <span className="text-sm transition-transform group-hover:-translate-x-0.5">←</span>
-                  <span className="hidden xs:inline text-[11px] sm:text-xs">Back</span>
+                  <span className="hidden sm:inline text-[11px] sm:text-xs">Back</span>
                 </button>
               )}
 
               {/* Brand Logo */}
-              <Link to="/" className="flex items-center gap-2 group min-w-0">
-                <span className="font-serif-luxury italic text-base sm:text-2xl lg:text-[23px] font-semibold tracking-tight text-[#1a1614] group-hover:text-[#2f54eb] transition-colors truncate">
+              <Link to="/" className="flex items-center gap-2 group min-w-0 max-w-[11rem] sm:max-w-none">
+                <span className="font-serif-luxury italic text-[13px] sm:text-2xl lg:text-[23px] font-semibold tracking-tight text-[#1a1614] group-hover:text-[#2f54eb] transition-colors truncate">
                   The Style Studio Lounge
                 </span>
               </Link>
@@ -305,10 +305,10 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
             </div>
 
             {/* Mobile Right Controls */}
-            <div className="flex lg:hidden items-center gap-2 flex-shrink-0">
+            <div className="flex lg:hidden items-center gap-1.5 sm:gap-2 flex-shrink-0">
               <Link
                 to="/booking"
-                className="relative w-11 h-11 rounded-full bg-white hover:bg-[#faf6f0] border border-[#b89a73]/30 flex items-center justify-center transition-all shadow-sm flex-shrink-0"
+                className="relative w-10 h-10 sm:w-11 sm:h-11 rounded-full bg-white hover:bg-[#faf6f0] border border-[#b89a73]/30 flex items-center justify-center transition-all shadow-sm flex-shrink-0"
                 aria-label="View Booking Cart"
               >
                 <span className="text-base">🛍️</span>
@@ -321,7 +321,7 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
               <button
                 type="button"
                 onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-                className={`flex items-center gap-1.5 px-3 py-2 rounded-full border transition-all text-xs font-semibold shadow-sm flex-shrink-0 min-h-[44px] ${
+                className={`flex items-center gap-1 px-2.5 sm:px-3 py-2 rounded-full border transition-all text-[11px] sm:text-xs font-semibold shadow-sm flex-shrink-0 min-h-[44px] ${
                   isMobileMenuOpen
                     ? 'bg-[#1a1614] text-white border-[#1a1614]'
                     : 'bg-white text-[#1a1614] border-[#b89a73]/35 hover:border-[#2f54eb]'

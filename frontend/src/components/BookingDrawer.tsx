@@ -138,10 +138,10 @@ export const BookingDrawer: React.FC<BookingDrawerProps> = ({
         onClick={onClose} 
       />
 
-      <div className="absolute inset-y-0 right-0 max-w-full flex pl-10">
-        <div className="w-screen max-w-md bg-white border-l border-[#b89a73]/30 flex flex-col shadow-2xl">
+      <div className="absolute inset-y-0 right-0 max-w-full flex pl-2 sm:pl-10">
+        <div className="w-[calc(100vw-0.5rem)] sm:w-screen max-w-md bg-white border-l border-[#b89a73]/30 flex flex-col shadow-2xl">
           {/* Header */}
-          <div className="p-6 border-b border-[#b89a73]/20 flex justify-between items-center bg-[#faf6f0]">
+          <div className="p-4 sm:p-6 border-b border-[#b89a73]/20 flex justify-between items-center bg-[#faf6f0] gap-3">
             <div>
               <h3 className="font-serif-luxury text-2xl font-semibold text-[#1a1614]">Your Sanctuary Visit</h3>
               <p className="text-xs text-[#5e5650] mt-0.5">The Style Studio Lounge • Derabassi</p>
@@ -149,14 +149,14 @@ export const BookingDrawer: React.FC<BookingDrawerProps> = ({
             <button
               type="button"
               onClick={onClose}
-              className="w-8 h-8 rounded-full bg-[#f4efe6] hover:bg-[#eadecc] text-[#5e5650] hover:text-[#1a1614] flex items-center justify-center transition-colors"
+              className="w-11 h-11 rounded-full bg-[#f4efe6] hover:bg-[#eadecc] text-[#5e5650] hover:text-[#1a1614] flex items-center justify-center transition-colors flex-shrink-0"
             >
               ✕
             </button>
           </div>
 
           {/* Body */}
-          <div className="flex-1 overflow-y-auto p-6 space-y-6">
+          <div className="flex-1 overflow-y-auto p-3.5 sm:p-6 space-y-5 sm:space-y-6">
             {cart.length === 0 ? (
               <div className="text-center py-16">
                 <div className="text-5xl mb-3 opacity-60">🛍️</div>
@@ -186,9 +186,9 @@ export const BookingDrawer: React.FC<BookingDrawerProps> = ({
                 {cart.map((item) => (
                   <div
                     key={item.id}
-                    className="p-3.5 bg-[#faf6f0] border border-[#b89a73]/25 rounded-2xl flex justify-between items-center hover:border-[#b89a73]/50 transition-colors"
+                    className="p-3 bg-[#faf6f0] border border-[#b89a73]/25 rounded-2xl flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 hover:border-[#b89a73]/50 transition-colors"
                   >
-                    <div>
+                    <div className="min-w-0 w-full sm:w-auto">
                       <div className="text-sm font-semibold text-[#1a1614] flex items-center gap-1.5">
                         {item.name}
                         {(item.isSpa || item.category === 'spa') && (
@@ -197,7 +197,7 @@ export const BookingDrawer: React.FC<BookingDrawerProps> = ({
                       </div>
                       <div className="text-xs text-[#5e5650] mt-0.5">⏱️ {item.duration}</div>
                     </div>
-                    <div className="flex items-center gap-3">
+                    <div className="flex items-center justify-between sm:justify-end gap-2 w-full sm:w-auto">
                       {/* Spa / null price: show "Price confirmed at the studio" */}
                       {item.isSpa || item.category === 'spa' || item.price === null ? (
                         <div className="text-right">
@@ -215,7 +215,7 @@ export const BookingDrawer: React.FC<BookingDrawerProps> = ({
                       <button
                         type="button"
                         onClick={() => onRemoveService(item.id)}
-                        className="text-slate-400 hover:text-red-500 p-1 transition-colors"
+                        className="w-11 h-11 flex-shrink-0 rounded-full flex items-center justify-center text-slate-400 hover:text-red-500 hover:bg-rose-50 transition-colors"
                         title="Remove"
                       >
                         ✕
